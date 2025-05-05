@@ -18,6 +18,7 @@ blocks.create = (name, id) => {
     block.strength = 1;
     block.ignore = false;
     block.transparent = false;
+    block.images = defualtimages;
     blocks.list[id] = block;
     Object.defineProperty(blocks, name, {
         get: () => {

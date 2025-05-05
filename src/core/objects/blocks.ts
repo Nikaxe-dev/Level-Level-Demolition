@@ -6,6 +6,13 @@ interface blockdatainterface {
 
     strength: number
 
+    // Animations/Sprites
+
+    frame: number
+    animationstate: animationstate
+        
+    images: imagesinterface
+
     ignore: boolean
     transparent: boolean
 }
@@ -44,13 +51,6 @@ interface blocksinterface {
     blockwidth: number
     blockheight: number
 
-    // Animations/Sprites
-
-    frame: number
-    animationstate: animationstate
-    
-    images: imagesinterface
-
     // Blocks
 
     air: blockdatainterface
@@ -70,6 +70,8 @@ blocks.create = (name, id) => {
     block.strength = 1
     block.ignore = false
     block.transparent = false
+
+    block.images = defualtimages
 
     blocks.list[id] = block
 

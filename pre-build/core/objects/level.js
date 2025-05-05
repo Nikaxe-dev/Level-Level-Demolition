@@ -43,6 +43,8 @@ level.generateblock = (x, y) => {
     const div = document.createElement("div");
     div.className = "grid-block";
     div.id = "grid-block-" + x + "-" + y;
+    div.setAttribute("blockx", String(x));
+    div.setAttribute("blocky", String(y));
     div.style.width = String(blocks.blockwidth) + "px";
     div.style.height = String(blocks.blockheight) + "px";
     div.style.position = "absolute";

@@ -9,7 +9,8 @@ import time
 from datetime import datetime
 import hashlib
 
-build_interval = 2.5
+build_interval = 1
+build_wait = 3
 comment = "// Scripts created by Nikaxe and compiled from typescript to javascript.\n\n"
 
 def clearbuild(build_dir):
@@ -96,6 +97,7 @@ def watch_and_copy(src_dir, build_dir):
         current_files = get_all_files_with_hash(src_dir)
 
         if current_files != previous_files:
+            time.sleep(build_wait)
             build()
             previous_files = current_files
 
