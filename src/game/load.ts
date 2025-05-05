@@ -7,20 +7,26 @@ debug.log("\tLoading Core Scripts", "loadscriptcatergory")
 debug.time("loadscriptcatergory")
 
 loadscript("../core/objects/blocks.js")
-loadscript("../config/blocktypes.js")
-
 loadscript("../core/objects/level.js")
-loadscript("../config/blocksettings.js")
-loadscript("../config/levelconfig.js")
 
-debug.log("\tFinished Loading Core Scripts", "loadscriptcatergory")
+setTimeout(() => {
+    loadscript("../config/blocktypes.js")
+    loadscript("../config/blocksettings.js")
+    loadscript("../config/levelconfig.js")
 
-debug.log("\tLoading Game Scripts", "loadscriptcatergory")
-debug.time("loadscriptcatergory")
+    console.log(blocks)
 
-loadscript("../game/main.js")
-loadscript("../game/levelhandler.js")
+    debug.log("\tFinished Loading Core Scripts", "loadscriptcatergory")
+}, 50)
 
-debug.log("\tFinished Loading Game Scripts", "loadscriptcatergory")
+setTimeout(() => {
+    debug.log("\tLoading Game Scripts", "loadscriptcatergory")
+    debug.time("loadscriptcatergory")
 
-debug.log("Finished Loading Scripts", "general")
+    loadscript("../game/main.js")
+    loadscript("../game/levelhandler.js")
+
+    debug.log("\tFinished Loading Game Scripts", "loadscriptcatergory")
+
+    debug.log("Finished Loading Scripts", "general")
+}, 50)

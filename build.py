@@ -97,7 +97,6 @@ def watch_and_copy(src_dir, build_dir):
         current_files = get_all_files_with_hash(src_dir)
 
         if current_files != previous_files:
-            time.sleep(build_wait)
             build()
             previous_files = current_files
 

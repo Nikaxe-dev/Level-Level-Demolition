@@ -10,5 +10,5 @@ level.generationsettings.dirtlayergrasschance = 0.05
 
 // Misc Settings
 
-level.width = 64
-level.height = 128
+level.width = 60
+level.height = 60

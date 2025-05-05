@@ -31,16 +31,6 @@ interface imagesinterface {
     }
 }
 
-const defualtimages: imagesinterface = {
-    idle: {
-        speed: 1,
-
-        frames: [
-            "/content/images/misc/unknown.png"
-        ]
-    },
-}
-
 interface blocksinterface {
     list: blockdatainterface[]
 
@@ -71,7 +61,15 @@ blocks.create = (name, id) => {
     block.ignore = false
     block.transparent = false
 
-    block.images = defualtimages
+    block.images = {
+        idle: {
+            speed: 1,
+    
+            frames: [
+                "/content/images/misc/unknown.png"
+            ]
+        },
+    }
 
     blocks.list[id] = block
 

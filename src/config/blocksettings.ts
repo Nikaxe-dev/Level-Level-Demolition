@@ -1,2 +1,2 @@
-blocks.blockwidth = 25
-blocks.blockheight = 25
+blocks.blockwidth = 32
+blocks.blockheight = 32

@@ -7,6 +7,7 @@ blocks.create("air", 0);
 blocks.air.strength = 0;
 blocks.air.ignore = true;
 blocks.air.transparent = true;
+blocks.air.images.idle.frames = ["/content/images/blocks/air.png"];
 // Stone
 blocks.create("stone", 1);
 blocks.stone.strength = 4;

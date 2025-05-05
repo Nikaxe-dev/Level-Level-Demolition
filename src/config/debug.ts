@@ -18,7 +18,11 @@ type debuglog =
 
     // Errors
 
-    "unknownerror"
+    "unknownerror" |
+
+    // Warnings 
+
+    "longwarning"
 
 interface debuginterface {
     loglist: debuglog[]
@@ -106,4 +110,7 @@ debug.loglist = [
     "gridupdate",
     "gridgeneration",
     "gridrendering",
+
+    "unknownerror",
+    "longwarning",
 ]

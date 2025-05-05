@@ -7,6 +7,7 @@ const biomes = [
 ];
 const level = {};
 level.grid = [];
+level.gridelements = [];
 // Grid Functions
 level.outputgrid = (grid) => {
     let message = "\n";
@@ -20,9 +21,9 @@ level.outputgrid = (grid) => {
 };
 level.generateblankgrid = () => {
     const blanklevel = [];
-    for (let y = 0; y < level.height; y++) {
+    for (let x = 0; x < level.width; x++) {
         const row = [];
-        for (let x = 0; x < level.width; x++) {
+        for (let y = 0; y < level.height; y++) {
             row.push(blocks.air.id);
         }
         blanklevel.push(row);
@@ -50,16 +51,40 @@ level.generateblock = (x, y) => {
     div.style.position = "absolute";
     div.style.left = String(x * blocks.blockwidth) + "px";
     div.style.top = String(y * blocks.blockheight) + "px";
-    div.style.backgroundColor = "rgb(16, 16, 16)";
+    const image = createimage("/content/images/misc/unknown.png");
+    image.classList.add("game-image");
+    image.width = blocks.blockwidth;
+    image.height = blocks.blockheight;
+    div.appendChild(image);
     document.getElementById("grid")?.appendChild(div);
+    return div;
 };
 level.generategrid = () => {
     debug.log("Generating HTML Grid", "gridrendering");
     debug.time("gridrendering");
-    for (let y = 0; y < level.height; y++) {
-        for (let x = 0; x < level.width; x++) {
-            level.generateblock(x, y);
+    for (let x = 0; x < level.width; x++) {
+        level.gridelements[x] = [];
+        for (let y = 0; y < level.height; y++) {
+            const div = level.generateblock(x, y);
+            level.gridelements[x][y] = div;
         }
     }
     debug.log("Finished Generating HTML Grid", "gridrendering");
+    debug.log("Rendering Grid For The First Time", "gridrendering");
+    debug.time("gridrendering");
+    level.rendergrid();
+    debug.log("Finished Rendering Grid For The First Time", "gridrendering");
+};
+level.renderposition = (x, y) => {
+    const div = level.gridelements[x][y];
+    const image = div.getElementsByClassName("game-image")[0];
+    const block = blocks.list[level.grid[x][y]];
+    image.src = block.images.idle.frames[0];
+};
+level.rendergrid = () => {
+    for (let y = 0; y < level.height; y++) {
+        for (let x = 0; x < level.width; x++) {
+            level.renderposition(x, y);
+        }
+    }
 };

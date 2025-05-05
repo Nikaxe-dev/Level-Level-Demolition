@@ -22,6 +22,7 @@ interface generationsettings {
 }
 
 type grid = number[][]
+type gridelements = HTMLDivElement[][]
 
 interface levelinterface {
     width: number
@@ -30,19 +31,24 @@ interface levelinterface {
     generationsettings: generationsettings
 
     grid: grid
+    gridelements: gridelements
 
     generatelevel(biome: biome): grid
     generateblankgrid(): grid
     outputgrid(grid: grid): string
 
     generategrid(): undefined
-    generateblock(x: number, y: number): undefined
+    generateblock(x: number, y: number): HTMLDivElement
     renderposition(x: number, y: number): undefined
+    rendergrid(): undefined
 }
+
+
 
 const level = {} as levelinterface
 
 level.grid = []
+level.gridelements = []
 
 // Grid Functions
 
@@ -63,10 +69,10 @@ level.outputgrid = (grid) => {
 level.generateblankgrid = () => {
     const blanklevel: number[][] = []
 
-    for (let y = 0; y < level.height; y++) {
+    for (let x = 0; x < level.width; x++) {
         const row: number[] = []
 
-        for(let x = 0; x < level.width; x++) {
+        for(let y = 0; y < level.height; y++) {
             row.push(blocks.air.id)
         }
 
@@ -105,20 +111,55 @@ level.generateblock = (x, y) => {
     div.style.left = String(x * blocks.blockwidth) + "px"
     div.style.top = String(y * blocks.blockheight) + "px"
 
-    div.style.backgroundColor = "rgb(16, 16, 16)"
+    const image = createimage("/content/images/misc/unknown.png")
+    image.classList.add("game-image")
+    image.width = blocks.blockwidth
+    image.height = blocks.blockheight
+
+    div.appendChild(image)
 
     document.getElementById("grid")?.appendChild(div)
+
+    return div
 }
 
 level.generategrid = () => {
     debug.log("Generating HTML Grid", "gridrendering")
     debug.time("gridrendering")
 
-    for(let y = 0; y < level.height; y++) {
-        for(let x = 0; x < level.width; x++) {
-            level.generateblock(x, y)
+    for(let x = 0; x < level.width; x++) {
+        level.gridelements[x] = []
+
+        for(let y = 0; y < level.height; y++) {
+            const div = level.generateblock(x, y)
+
+            level.gridelements[x][y] = div
         }
     }
 
     debug.log("Finished Generating HTML Grid", "gridrendering")
+
+    debug.log("Rendering Grid For The First Time", "gridrendering")
+    debug.time("gridrendering")
+
+    level.rendergrid()
+
+    debug.log("Finished Rendering Grid For The First Time", "gridrendering")
+}
+
+level.renderposition = (x, y) => {
+    const div = level.gridelements[x][y]
+    const image = div.getElementsByClassName("game-image")[0] as HTMLImageElement
+
+    const block = blocks.list[level.grid[x][y]]
+
+    image.src = block.images.idle.frames[0]
+}
+
+level.rendergrid = () => {
+    for(let y = 0; y < level.height; y++) {
+        for(let x = 0; x < level.width; x++) {
+            level.renderposition(x, y)
+        }
+    }
 }
