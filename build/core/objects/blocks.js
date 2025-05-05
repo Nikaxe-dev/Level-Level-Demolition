@@ -1,6 +1,14 @@
 // Scripts created by Nikaxe and compiled from typescript to javascript.
 
 "use strict";
+const defualtimages = {
+    idle: {
+        speed: 1,
+        frames: [
+            "/content/images/misc/unknown.png"
+        ]
+    },
+};
 const blocks = {};
 blocks.list = [];
 blocks.create = (name, id) => {

@@ -5,6 +5,7 @@ debug.log("\tLoading Common Scripts", "loadscriptcatergory")
 debug.time("loadscriptcatergory")
 
 loadscript("../core/common/choose.js")
+loadscript("../core/common/image.js")
 
 debug.log("\tFinished Loading Common Scripts", "loadscriptcatergory")
 

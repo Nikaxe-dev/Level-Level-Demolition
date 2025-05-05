@@ -1,3 +1,5 @@
+type animationstate = "idle" | string
+
 interface blockdatainterface {
     name: string
     id: number
@@ -6,6 +8,30 @@ interface blockdatainterface {
 
     ignore: boolean
     transparent: boolean
+}
+
+interface imagesinterface {
+    idle: {
+        speed: 1
+
+        frames: string[]
+    }
+
+    [key: string]: {
+        speed: 1
+
+        frames: string[]
+    }
+}
+
+const defualtimages: imagesinterface = {
+    idle: {
+        speed: 1,
+
+        frames: [
+            "/content/images/misc/unknown.png"
+        ]
+    },
 }
 
 interface blocksinterface {
@@ -17,6 +43,13 @@ interface blocksinterface {
 
     blockwidth: number
     blockheight: number
+
+    // Animations/Sprites
+
+    frame: number
+    animationstate: animationstate
+    
+    images: imagesinterface
 
     // Blocks
 
