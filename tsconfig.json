@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "./pre-build",
     "rootDir": "./src",
     "module": "ESNext",
     "target": "ESNext",
