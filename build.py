@@ -1,3 +1,8 @@
+# This script is completly made by ai
+# Yes im that lazy
+# Yes im too bothered to learn python properly to make it myself
+# And yes i will eat my own words and do it myself if it stops working.
+
 import os
 import shutil
 import time
@@ -32,8 +37,8 @@ def copy_non_ts_files(src_dir, build_dir):
 def compiletypescript():
     os.system("tsc")
 
-def addcommenttojavascript():
-    for root, _, files in os.walk(build_directory):
+def addcommenttojavascript(build_dir):
+    for root, _, files in os.walk(build_dir):
         for file in files:
             if file.endswith('.js'):
                 js_file_path = os.path.join(root, file)
@@ -42,8 +47,13 @@ def addcommenttojavascript():
                     f.seek(0, 0)
                     f.write(comment + content)
 
+def transfer_to_build(pre_build_dir, build_dir):
+    if os.path.exists(build_dir):
+        shutil.rmtree(build_dir)
+    shutil.copytree(pre_build_dir, build_dir)
 
 src_directory = './src'
+pre_build_directory = './pre-build'
 build_directory = './build'
 
 def build():
@@ -51,10 +61,11 @@ def build():
     nowtime = datetime.now()
     print(nowtime.strftime("%d/%m/%Y, %H:%M:%S") + " > Building Files")
 
-    clearbuild(build_directory)
-    copy_non_ts_files(src_directory, build_directory)
+    clearbuild(pre_build_directory)
+    copy_non_ts_files(src_directory, pre_build_directory)
     compiletypescript()
-    addcommenttojavascript()
+    addcommenttojavascript(pre_build_directory)
+    transfer_to_build(pre_build_directory, build_directory)
 
     print("Built files in " + str((nowtime.microsecond - datetime.now().microsecond) / 1000000) + " seconds")
 
