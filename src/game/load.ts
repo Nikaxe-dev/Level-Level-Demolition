@@ -14,8 +14,6 @@ setTimeout(() => {
     loadscript("../config/blocksettings.js")
     loadscript("../config/levelconfig.js")
 
-    console.log(blocks)
-
     debug.log("\tFinished Loading Core Scripts", "loadscriptcatergory")
 }, 50)
 

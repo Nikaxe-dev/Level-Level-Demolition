@@ -31,12 +31,15 @@ level.generateblankgrid = () => {
     return blanklevel;
 };
 level.generatelevel = (biome) => {
+    debug.log("Generating New Level", "gridgeneration");
+    debug.time("gridgeneration");
     const grid = level.generateblankgrid();
     grid.forEach((row, index) => {
         row.forEach((id, index) => {
             row[index] = chooseid(blocks.list);
         });
     });
+    debug.log("Finished Generating New Level", "gridgeneration");
     return grid;
 };
 // Render Functions
@@ -60,8 +63,8 @@ level.generateblock = (x, y) => {
     return div;
 };
 level.generategrid = () => {
-    debug.log("Generating HTML Grid", "gridrendering");
-    debug.time("gridrendering");
+    debug.log("Generating HTML Grid", "general");
+    debug.time("general");
     for (let x = 0; x < level.width; x++) {
         level.gridelements[x] = [];
         for (let y = 0; y < level.height; y++) {
@@ -69,11 +72,11 @@ level.generategrid = () => {
             level.gridelements[x][y] = div;
         }
     }
-    debug.log("Finished Generating HTML Grid", "gridrendering");
-    debug.log("Rendering Grid For The First Time", "gridrendering");
-    debug.time("gridrendering");
+    debug.log("Finished Generating HTML Grid", "general");
+    debug.log("Rendering Grid For The First Time", "general");
+    debug.time("general");
     level.rendergrid();
-    debug.log("Finished Rendering Grid For The First Time", "gridrendering");
+    debug.log("Finished Rendering Grid For The First Time", "general");
 };
 level.renderposition = (x, y) => {
     const div = level.gridelements[x][y];

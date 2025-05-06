@@ -1,12 +1,13 @@
 // Scripts created by Nikaxe and compiled from typescript to javascript.
 
 "use strict";
-function createimage(src) {
+function createimage(url) {
     const img = document.createElement("img");
-    img.onerror = (ev, source, lineno, colno, err) => {
-        debug.error("Cannot find image: '" + src + "' replacing it with 'root/content/images/misc/unknown.png'", "unknownerror");
+    img.onerror = () => {
+        const path = new URL(img.src).pathname; // Extract only the path
+        console.error(`Cannot find image: '${path}', replacing it with '/content/images/misc/unknown.png'`);
         img.src = "/content/images/misc/unknown.png";
     };
-    img.src = src;
+    img.src = url;
     return img;
 }

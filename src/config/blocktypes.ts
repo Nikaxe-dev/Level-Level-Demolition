@@ -25,6 +25,8 @@ blocks.create("dirt", 2)
 
 blocks.dirt.strength = 2.5
 
+blocks.dirt.images.idle.frames = ["/content/images/blocks/dirt.png"]
+
 // Grass
 
 blocks.create("grass", 3)
