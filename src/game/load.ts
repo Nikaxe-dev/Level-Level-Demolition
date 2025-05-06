@@ -6,8 +6,10 @@ debug.time("general")
 debug.log("\tLoading Core Scripts", "loadscriptcatergory")
 debug.time("loadscriptcatergory")
 
+loadscript("../core/objects/game.js")
 loadscript("../core/objects/blocks.js")
 loadscript("../core/objects/level.js")
+loadscript("../core/objects/camera.js")
 
 setTimeout(() => {
     loadscript("../config/blocktypes.js")

@@ -1,0 +1,1 @@
+const game: HTMLDivElement = document.getElementById("game") as HTMLDivElement

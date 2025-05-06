@@ -1,3 +1,8 @@
 img {
     image-rendering: pixelated;
 }
+
+* {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
