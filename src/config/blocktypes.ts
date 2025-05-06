@@ -17,6 +17,8 @@ blocks.create("stone", 1)
 
 blocks.stone.strength = 4
 
+blocks.stone.images.idle.frames = ["/content/images/blocks/stone.png"]
+
 // Dirt
 
 blocks.create("dirt", 2)
