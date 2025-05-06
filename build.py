@@ -3,11 +3,23 @@
 # Yes im too bothered to learn python properly to make it myself
 # And yes i will eat my own words and do it myself if it stops working.
 
+# Creates a command prompt window that Localhosts the root folder & Builds the game every time a change is detected.
+
 import os
 import shutil
 import time
 from datetime import datetime
 import hashlib
+import threading
+
+def start_http_server():
+    def run_server():
+        os.system('start "Development - Localhost" cmd /k python -m http.server 8000')
+    
+    server_thread = threading.Thread(target=run_server, daemon=True)
+    server_thread.start()
+
+start_http_server()
 
 build_interval = 1
 build_wait = 3
