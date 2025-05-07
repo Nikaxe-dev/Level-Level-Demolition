@@ -4,10 +4,10 @@ debug.time("general")
 debug.log("\tLoading Common Scripts", "loadscriptcatergory")
 debug.time("loadscriptcatergory")
 
-loadscript("../core/common/choose.js")
-loadscript("../core/common/image.js")
-loadscript("../core/common/table.js")
-loadscript("../core/common/wait.js")
+loadscript("/build/core/common/choose.js")
+loadscript("/build/core/common/image.js")
+loadscript("/build/core/common/table.js")
+loadscript("/build/core/common/wait.js")
 
 debug.log("\tFinished Loading Common Scripts", "loadscriptcatergory")
 
