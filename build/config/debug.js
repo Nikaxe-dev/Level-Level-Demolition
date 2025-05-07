@@ -62,3 +62,6 @@ debug.loglist = [
     "unknownerror",
     "longwarning",
 ];
+// || CUSTOM LOGTYPES ||
+//  For custom logtypes you dont need to change anything in this file.
+//  All you need to do is just use the name in the functions.

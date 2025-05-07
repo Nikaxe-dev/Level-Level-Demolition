@@ -1,33 +1,35 @@
 type debuglog =
     // Debug tags
 
-    "logtype" |
+    | "logtype"
 
-    "loadscript" |
-    "loadscriptcatergory" |
+    | "loadscript"
+    | "loadscriptcatergory"
 
-    "hooks" |
-    "general" |
+    | "hooks"
+    | "general"
 
     // Grid
 
-    "grid" |
-    "gridupdate" |
-    "gridgeneration" |
-    "gridrendering" |
+    | "grid"
+    | "gridupdate"
+    | "gridgeneration"
+    | "gridrendering"
 
     // Input
 
-    "inputsetup" |
-    "inputdebug" |
+    | "inputsetup"
+    | "inputdebug"
 
     // Errors
 
-    "unknownerror" |
+    | "unknownerror"
 
     // Warnings 
 
-    "longwarning"
+    | "longwarning"
+
+    | (string & {})
 
 interface debuginterface {
     loglist: debuglog[]
@@ -122,3 +124,7 @@ debug.loglist = [
     "unknownerror",
     "longwarning",
 ]
+
+// || CUSTOM LOGTYPES ||
+//  For custom logtypes you dont need to change anything in this file.
+//  All you need to do is just use the name in the functions.
