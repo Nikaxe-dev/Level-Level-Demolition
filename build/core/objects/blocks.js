@@ -10,14 +10,14 @@ blocks.create = (name, id) => {
     block.strength = 1;
     block.ignore = false;
     block.transparent = false;
-    block.images = {
-        idle: {
-            speed: 1,
-            frames: [
-                "/content/images/misc/unknown.png"
-            ]
-        },
-    };
+    block.images = {};
+    block.images.idle = {
+        speed: 1,
+        frames: [
+            "/content/images/misc/unknown.png"
+        ]
+    },
+        block.images.item = block.images.idle;
     blocks.list[id] = block;
     Object.defineProperty(blocks, name, {
         get: () => {

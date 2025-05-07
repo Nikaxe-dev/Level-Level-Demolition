@@ -16,6 +16,11 @@ type debuglog =
     "gridgeneration" |
     "gridrendering" |
 
+    // Input
+
+    "inputsetup" |
+    "inputdebug" |
+
     // Errors
 
     "unknownerror" |
@@ -110,6 +115,9 @@ debug.loglist = [
     "gridupdate",
     "gridgeneration",
     "gridrendering",
+
+    "inputsetup",
+    "inputdebug",
 
     "unknownerror",
     "longwarning",

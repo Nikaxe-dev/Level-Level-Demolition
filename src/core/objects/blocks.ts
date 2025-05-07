@@ -19,13 +19,19 @@ interface blockdatainterface {
 
 interface imagesinterface {
     idle: {
-        speed: 1
+        speed: number
+
+        frames: string[]
+    }
+
+    item: {
+        speed: number
 
         frames: string[]
     }
 
     [key: string]: {
-        speed: 1
+        speed: number
 
         frames: string[]
     }
@@ -61,15 +67,17 @@ blocks.create = (name, id) => {
     block.ignore = false
     block.transparent = false
 
-    block.images = {
-        idle: {
-            speed: 1,
-    
-            frames: [
-                "/content/images/misc/unknown.png"
-            ]
-        },
-    }
+    block.images = {} as imagesinterface
+
+    block.images.idle = {
+        speed: 1,
+
+        frames: [
+            "/content/images/misc/unknown.png"
+        ]
+    },
+
+    block.images.item = block.images.idle
 
     blocks.list[id] = block
 

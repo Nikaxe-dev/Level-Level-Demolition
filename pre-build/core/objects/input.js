@@ -54,3 +54,4 @@ input.beginlisten = () => {
         input.mouse.y = e.clientY;
     };
 };
+input.beginlisten();

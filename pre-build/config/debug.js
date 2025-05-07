@@ -57,6 +57,8 @@ debug.loglist = [
     "gridupdate",
     "gridgeneration",
     "gridrendering",
+    "inputsetup",
+    "inputdebug",
     "unknownerror",
     "longwarning",
 ];
