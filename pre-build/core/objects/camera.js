@@ -2,12 +2,13 @@
 
 "use strict";
 const camera = {};
-camera.zoom = 25;
+camera.zoom = 100;
 camera.x = 0;
 camera.y = 0;
-camera.xv = 0;
-camera.yv = 0;
-document.body.style.position = "relative";
+camera.xv = 1;
+camera.yv = -1;
+game.style.position = "absolute";
+game.style.transformOrigin = "0 0";
 game.style.overflow = "hidden";
 document.body.style.overflow = "hidden";
 camera.logic = () => {
@@ -15,9 +16,7 @@ camera.logic = () => {
     camera.y += camera.yv;
 };
 camera.render = () => {
-    document.body.style.left = -camera.x + "px";
-    document.body.style.top = camera.y + "px";
-    document.body.style.transform = `scale(${camera.zoom / 100})`;
+    game.style.transform = `translate(${-camera.x}px, ${camera.y}px) scale(${camera.zoom / 100})`;
 };
 camera.frame = () => {
     camera.logic();

@@ -10,3 +10,5 @@ level.generationsettings.dirtlayergrasschance = 0.05;
 // Misc Settings
 level.width = 60;
 level.height = 60;
+level.griddiv.style.width = `${level.width * blocks.blockwidth}px`;
+level.griddiv.style.height = `${level.height * blocks.blockheight}px`;

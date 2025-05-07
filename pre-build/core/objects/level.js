@@ -6,6 +6,7 @@ const biomes = [
     "plains"
 ];
 const level = {};
+level.griddiv = document.getElementById("grid");
 level.grid = [];
 level.gridelements = [];
 // Grid Functions
@@ -52,8 +53,8 @@ level.generateblock = (x, y) => {
     div.style.width = String(blocks.blockwidth) + "px";
     div.style.height = String(blocks.blockheight) + "px";
     div.style.position = "absolute";
-    div.style.left = String(x * blocks.blockwidth) + "px";
-    div.style.top = String(y * blocks.blockheight) + "px";
+    div.style.left = `${x * blocks.blockwidth}px`;
+    div.style.top = `${y * blocks.blockheight}px`;
     const image = createimage("/content/images/misc/unknown.png");
     image.classList.add("game-image");
     image.width = blocks.blockwidth;
