@@ -37,6 +37,8 @@ camera.render = () => {
 camera.frame = () => {
     camera.logic()
     camera.render()
+
+    requestAnimationFrame(camera.frame)
 }
 
-setInterval(camera.frame, 10)
+camera.frame()
