@@ -1,1 +1,3 @@
-input.beginlisten()
+hooks.registerhookcallback("game.scripts.loaded", () => {
+    loadscript("/build/game/levelhandler.js")
+})

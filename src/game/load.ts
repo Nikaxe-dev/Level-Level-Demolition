@@ -1,33 +1,76 @@
-debug.log("Loading Scripts", "general")
-debug.time("general")
+interface loadscriptsinterface {
+    [key: string]: string[]
+}
 
-// Load Scripts
+const loadscripts: loadscriptsinterface = {
+    "Common Scripts": [
+        "/build/core/common/choose.js",
+        "/build/core/common/image.js",
+        "/build/core/common/table.js",
+        "/build/core/common/wait.js",
+        "/build/core/common/loadscript.js",
+    ],
 
-debug.log("\tLoading Core Scripts", "loadscriptcatergory")
-debug.time("loadscriptcatergory")
+    "Core Scripts": [
+        "/build/core/objects/game.js",
+        "/build/core/objects/hooks.js",
+        "/build/core/objects/input.js",
+        "/build/core/objects/blocks.js",
+        "/build/core/objects/level.js",
+        "/build/core/objects/camera.js",
+    ],
 
-loadscript("/build/core/objects/game.js")
-loadscript("/build/core/objects/input.js")
-loadscript("/build/core/objects/blocks.js")
-loadscript("/build/core/objects/level.js")
-loadscript("/build/core/objects/camera.js")
+    "Configuration Scripts": [
+        "/build/config/blocksettings.js",
+        "/build/config/blocktypes.js",
+        "/build/config/levelconfig.js",
+    ],
 
-setTimeout(() => {
-    loadscript("/build/config/blocktypes.js")
-    loadscript("/build/config/blocksettings.js")
-    loadscript("/build/config/levelconfig.js")
+    "Game Scripts": [
+        "/build/game/main.js",
+    ],
+}
 
-    debug.log("\tFinished Loading Core Scripts", "loadscriptcatergory")
-}, 50)
+function loadscriptthen(url: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (typeof debug !== "undefined") {
+            debug.log("\t\tLoading Script: " + url, "loadscript")
+        }
 
-setTimeout(() => {
-    debug.log("\tLoading Game Scripts", "loadscriptcatergory")
-    debug.time("loadscriptcatergory")
+        const script = document.createElement("script")
 
-    loadscript("/build/game/main.js")
-    loadscript("/build/game/levelhandler.js")
+        script.onload = () => resolve()
+        script.onerror = (err) => reject(err)
 
-    debug.log("\tFinished Loading Game Scripts", "loadscriptcatergory")
+        script.src = url
+        script.type = "text/javascript"
+        script.classList.add("loaded")
+
+        document.body.appendChild(script)
+    })
+}
+
+async function loadallscripts() {
+    debug.log("Loading Scripts", "general")
+    debug.time("general")
+
+    for (const [key, value] of Object.entries(loadscripts)) {
+        debug.log("\tLoading " + key, "loadscriptcatergory")
+        debug.time("loadscriptcatergory")
+
+        for (const url of value) {
+            await loadscriptthen(url)
+        }
+
+        debug.log("\tFinished Loading " + key, "loadscriptcatergory")
+    }
 
     debug.log("Finished Loading Scripts", "general")
-}, 50)
+    debug.log(" ", "general")
+
+    hooks.callhook("game.scripts.loaded")
+}
+
+loadallscripts().catch((err) => {
+    console.error("Error loading scripts:", err)
+})

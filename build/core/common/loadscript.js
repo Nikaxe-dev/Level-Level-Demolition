@@ -3,7 +3,7 @@
 "use strict";
 function loadscript(url) {
     if (typeof debug !== "undefined") {
-        debug.log("\t\tLoading Script: " + url, "loadscript");
+        debug.log("Loading Script: " + url, "loadscript");
     }
     const script = document.createElement("script");
     script.src = url;

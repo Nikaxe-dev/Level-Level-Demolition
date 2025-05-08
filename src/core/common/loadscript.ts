@@ -1,6 +1,6 @@
 function loadscript(url: string) {
     if(typeof debug !== "undefined") {
-        debug.log("\t\tLoading Script: " + url, "loadscript")
+        debug.log("Loading Script: " + url, "loadscript")
     }
 
     const script = document.createElement("script")
