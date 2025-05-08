@@ -42,6 +42,9 @@ input.keydown = (key) => {
 }
 
 input.beginlisten = () => {
+    debug.log("Beginning Listen For Input", "inputsetup")
+    debug.time("inputsetup")
+
     addEventListener("keydown", (e) => {
         input.keyboard[e.key.toLowerCase()] = true
     })
@@ -90,6 +93,6 @@ input.beginlisten = () => {
         input.mouse.x = e.clientX
         input.mouse.y = e.clientY
     }
-}
 
-input.beginlisten()
+    debug.log("Finished Beginning Listen For Input", "inputsetup")
+}

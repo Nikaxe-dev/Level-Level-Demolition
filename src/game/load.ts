@@ -7,6 +7,7 @@ debug.log("\tLoading Core Scripts", "loadscriptcatergory")
 debug.time("loadscriptcatergory")
 
 loadscript("/build/core/objects/game.js")
+loadscript("/build/core/objects/input.js")
 loadscript("/build/core/objects/blocks.js")
 loadscript("/build/core/objects/level.js")
 loadscript("/build/core/objects/camera.js")

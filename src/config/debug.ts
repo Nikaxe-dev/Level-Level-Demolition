@@ -39,8 +39,8 @@ interface debuginterface {
     timers: { [key: string]: Date | undefined }
 
     time(type: debuglog): undefined
-    log(text: string, type: debuglog, othertypes?: debuglog[]): undefined
-    error(text: string, type: debuglog, othertypes?: debuglog[]): undefined
+    log(text: any, type: debuglog, othertypes?: debuglog[]): undefined
+    error(text: any, type: debuglog, othertypes?: debuglog[]): undefined
 }
 
 const debug = {} as debuginterface

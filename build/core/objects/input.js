@@ -15,6 +15,8 @@ input.keydown = (key) => {
     return typeof input.keyboard[key] == "undefined" ? false : input.keyboard[key];
 };
 input.beginlisten = () => {
+    debug.log("Beginning Listen For Input", "inputsetup");
+    debug.time("inputsetup");
     addEventListener("keydown", (e) => {
         input.keyboard[e.key.toLowerCase()] = true;
     });
@@ -53,5 +55,5 @@ input.beginlisten = () => {
         input.mouse.x = e.clientX;
         input.mouse.y = e.clientY;
     };
+    debug.log("Finished Beginning Listen For Input", "inputsetup");
 };
-input.beginlisten();
