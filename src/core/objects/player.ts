@@ -97,7 +97,5 @@ player.frame = () => {
     div.style.top = `${-player.y}px`
     div.style.transform = `rotate(${player.rotation - 90}deg)`
 
-    console.log(player.rotation)
-
     requestAnimationFrame(player.frame)
 }
