@@ -12,9 +12,9 @@ hooks.registerhook = (name) => {
 hooks.registerhookcallback = (name, callback) => {
     hooks.hooks[name]?.connections.push(callback);
 };
-hooks.callhook = (name) => {
+hooks.callhook = (name, ...args) => {
     for (const connection of hooks.hooks[name]?.connections) {
-        connection();
+        connection(...args);
     }
 };
 hooks.registerhook("game.scripts.loaded");

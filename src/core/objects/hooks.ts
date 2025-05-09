@@ -3,6 +3,12 @@ type defaulthooks =
 
     | "game.scripts.loaded"
 
+    | "grid.render.blocks.created"
+    | "grid.render.blocks.updated"
+
+    | "grid.update.blocks.set"
+    | "grid.update.blocks.update"
+
     | (string & {})
 
 type hookconnection = ((...args: any[]) => undefined)
@@ -39,9 +45,9 @@ hooks.registerhookcallback = (name, callback) => {
     hooks.hooks[name]?.connections.push(callback)
 }
 
-hooks.callhook = (name) => {
+hooks.callhook = (name, ...args: any[]) => {
     for(const connection of hooks.hooks[name]?.connections as hookconnection[]) {
-        connection()
+        connection(...args)
     }
 }
 
