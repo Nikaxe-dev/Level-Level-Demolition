@@ -1,4 +1,4 @@
-![thumbnail](/content/images/publishing/title/thumbnail.png)
+![thumbnail](/content/images/publishing/titles/thumbnail.png)
 
 # Level Level Demolition
 
