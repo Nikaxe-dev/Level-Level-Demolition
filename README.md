@@ -1,3 +1,5 @@
+![thumbnail](/content/images/publishing/titles/thumbnail.png)
+
 # Level Level Demolition
 
 Welcome to the Level Level Demolition Source Code!
