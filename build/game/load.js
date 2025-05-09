@@ -26,11 +26,8 @@ const loadscripts = {
         "/build/game/main.js",
     ],
 };
-function loadscriptthen(url) {
+function loadscriptpromise(url) {
     return new Promise((resolve, reject) => {
-        if (typeof debug !== "undefined") {
-            debug.log("\t\tLoading Script: " + url, "loadscript");
-        }
         const script = document.createElement("script");
         script.onload = () => resolve();
         script.onerror = (err) => reject(err);
@@ -47,7 +44,9 @@ async function loadallscripts() {
         debug.log("\tLoading " + key, "loadscriptcatergory");
         debug.time("loadscriptcatergory");
         for (const url of value) {
-            await loadscriptthen(url);
+            debug.time("loadscript");
+            await loadscriptpromise(url);
+            debug.log("\t\tLoaded Script: " + url, "loadscript");
         }
         debug.log("\tFinished Loading " + key, "loadscriptcatergory");
     }

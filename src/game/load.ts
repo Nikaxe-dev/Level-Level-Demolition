@@ -31,12 +31,8 @@ const loadscripts: loadscriptsinterface = {
     ],
 }
 
-function loadscriptthen(url: string): Promise<void> {
+function loadscriptpromise(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
-        if (typeof debug !== "undefined") {
-            debug.log("\t\tLoading Script: " + url, "loadscript")
-        }
-
         const script = document.createElement("script")
 
         script.onload = () => resolve()
@@ -59,7 +55,11 @@ async function loadallscripts() {
         debug.time("loadscriptcatergory")
 
         for (const url of value) {
-            await loadscriptthen(url)
+            debug.time("loadscript")
+
+            await loadscriptpromise(url)
+
+            debug.log("\t\tLoaded Script: " + url, "loadscript")
         }
 
         debug.log("\tFinished Loading " + key, "loadscriptcatergory")
