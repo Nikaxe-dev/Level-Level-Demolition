@@ -11,6 +11,10 @@ const loadscripts: loadscriptsinterface = {
         "/build/core/common/loadscript.js",
     ],
 
+    "Pre-Core Configuration Scripts": [
+        "/build/config/layers.js"
+    ],
+
     "Core Scripts": [
         "/build/core/objects/game.js",
         "/build/core/objects/hooks.js",
@@ -18,9 +22,10 @@ const loadscripts: loadscriptsinterface = {
         "/build/core/objects/blocks.js",
         "/build/core/objects/level.js",
         "/build/core/objects/camera.js",
+        "/build/core/objects/player.js",
     ],
 
-    "Configuration Scripts": [
+    "Post-Core Configuration Scripts": [
         "/build/config/blocksettings.js",
         "/build/config/blocktypes.js",
         "/build/config/levelconfig.js",

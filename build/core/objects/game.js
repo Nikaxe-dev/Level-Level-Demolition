@@ -2,3 +2,5 @@
 
 "use strict";
 const game = document.getElementById("game");
+game.style.overflow = "visible";
+document.body.style.overflow = "hidden";
