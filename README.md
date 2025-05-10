@@ -4,6 +4,8 @@
 
 Welcome to the Level Level Demolition Source Code!
 
+[Try The Game Out](https://nikaxe-dev.github.io/Level-Level-Demolition/game)
+
 ## Directories
 
 ## /root
