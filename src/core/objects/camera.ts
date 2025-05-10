@@ -13,7 +13,7 @@ interface camerainterface {
 }
 
 const camera = {} as camerainterface
-camera.zoom = 50
+camera.zoom = 75
 camera.x = 0
 camera.y = 0
 camera.xv = 0

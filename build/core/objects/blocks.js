@@ -2,6 +2,17 @@
 
 "use strict";
 const blocks = {};
+blocks.newblock = (id, x, y) => {
+    let block = {};
+    let type = blocks.list[id];
+    block.animationstate = "idle";
+    block.frame = 0;
+    block.health = type.strength;
+    block.x = x;
+    block.y = y;
+    block = Object.assign(block, type);
+    return block;
+};
 blocks.list = [];
 blocks.create = (name, id) => {
     let block = {};

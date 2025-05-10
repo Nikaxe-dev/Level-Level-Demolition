@@ -103,7 +103,7 @@ player.frame = () => {
 
     level.gridelements.forEach((row, x) => {
         row.forEach((block, y) => {
-            if(blocks.list[level.grid[x][y]].docollide) {
+            if(level.grid[x][y].docollide) {
                 const blockboundingrect = block.getBoundingClientRect()
 
                 const blockasobject = {
@@ -113,7 +113,7 @@ player.frame = () => {
                     height: blockboundingrect.height
                 }
 
-                if(level.grid[x][y] == 0) {
+                if(level.grid[x][y].id == 0) {
                     console.log("aaaaa")
                 }
 

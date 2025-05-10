@@ -7,15 +7,24 @@ interface blockdatainterface {
     strength: number
 
     // Animations/Sprites
-
-    frame: number
-    animationstate: animationstate
         
     images: imagesinterface
 
     ignore: boolean
     transparent: boolean
     docollide: boolean
+}
+
+interface blockinterface extends blockdatainterface {
+    id: number
+
+    health: number
+
+    frame: number
+    animationstate: animationstate
+
+    x: number
+    y: number
 }
 
 interface imagesinterface {
@@ -42,6 +51,7 @@ interface blocksinterface {
     list: blockdatainterface[]
 
     create(name: string, id: number): blockdatainterface
+    newblock(id: number, x: number, y: number): blockinterface
 
     // Settings
 
@@ -57,6 +67,22 @@ interface blocksinterface {
 }
 
 const blocks = {} as blocksinterface
+
+blocks.newblock = (id, x, y) => {
+    let block = {} as blockinterface
+
+    let type = blocks.list[id]
+
+    block.animationstate = "idle"
+    block.frame = 0
+    block.health = type.strength
+    block.x = x
+    block.y = y
+
+    block = Object.assign(block, type)
+
+    return block
+}
 
 blocks.list = []
 

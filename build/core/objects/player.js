@@ -60,7 +60,7 @@ player.frame = () => {
     player.y += player.yv;
     level.gridelements.forEach((row, x) => {
         row.forEach((block, y) => {
-            if (blocks.list[level.grid[x][y]].docollide) {
+            if (level.grid[x][y].docollide) {
                 const blockboundingrect = block.getBoundingClientRect();
                 const blockasobject = {
                     x: x * blocks.blockwidth,
@@ -68,7 +68,7 @@ player.frame = () => {
                     width: blockboundingrect.width,
                     height: blockboundingrect.height
                 };
-                if (level.grid[x][y] == 0) {
+                if (level.grid[x][y].id == 0) {
                     console.log("aaaaa");
                 }
                 const colliding = () => touchingobject({ x: player.x, y: player.y, width: player.hitboxwidth, height: player.hitboxheight }, blockasobject);

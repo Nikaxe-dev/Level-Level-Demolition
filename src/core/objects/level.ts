@@ -21,7 +21,7 @@ interface generationsettings {
     bedrockheight: number
 }
 
-type grid = number[][]
+type grid = blockinterface[][]
 type gridelements = HTMLDivElement[][]
 
 interface levelinterface {
@@ -70,13 +70,15 @@ level.outputgrid = (grid) => {
 }
 
 level.generateblankgrid = () => {
-    const blanklevel: number[][] = []
+    const blanklevel: blockinterface[][] = []
 
     for (let x = 0; x < level.width; x++) {
-        const row: number[] = []
+        const row: blockinterface[] = []
 
         for(let y = 0; y < level.height; y++) {
-            row.push(blocks.air.id)
+            let block = blocks.newblock(0, x, y)
+
+            row.push(block)
         }
 
         blanklevel.push(row)
@@ -91,18 +93,18 @@ level.generatelevel = (biome) => {
 
     const grid = level.generateblankgrid()
     
-    grid.forEach((row, y) => {
-        row.forEach((id, x) => {
+    grid.forEach((row, x) => {
+        row.forEach((id, y) => {
             const plainsblockheight = Math.round(level.height * level.generationsettings.plainsheight)
 
             console.log(plainsblockheight)
 
-            if(x == plainsblockheight) {
-                row[x] = blocks.grass.id
+            if(y == plainsblockheight) {
+                row[y] = blocks.newblock(blocks.grass.id, x, y)
             }
 
-            if(x < plainsblockheight) {
-                row[x] = blocks.dirt.id
+            if(y < plainsblockheight) {
+                row[y] = blocks.newblock(blocks.dirt.id, x, y)
             }
         })
     })
@@ -169,7 +171,7 @@ level.renderposition = (x, y) => {
     const div = level.gridelements[x][y]
     const image = div.getElementsByClassName("game-image")[0] as HTMLImageElement
 
-    const block = blocks.list[level.grid[x][y]]
+    const block = blocks.list[level.grid[x][y].id]
 
     image.src = block.images.idle.frames[0]
 }
