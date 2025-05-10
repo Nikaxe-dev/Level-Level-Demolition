@@ -9,6 +9,13 @@ const level = {};
 level.griddiv = document.getElementById("grid");
 level.grid = [];
 level.gridelements = [];
+// Hooks
+hooks.registerhook("grid.render.blocks.created");
+hooks.registerhook("grid.render.blocks.updated");
+hooks.registerhook("grid.render.block.created");
+hooks.registerhook("grid.render.block.updated");
+hooks.registerhook("grid.update.blocks.set");
+hooks.registerhook("grid.update.blocks.update");
 // Grid Functions
 level.outputgrid = (grid) => {
     let message = "\n";
@@ -39,17 +46,34 @@ level.generatelevel = (biome) => {
     grid.forEach((row, x) => {
         row.forEach((id, y) => {
             const plainsblockheight = Math.round(level.height * level.generationsettings.plainsheight);
-            console.log(plainsblockheight);
+            const stoneblockheight = Math.round(level.height * level.generationsettings.stoneheight);
             if (y == plainsblockheight) {
                 row[y] = blocks.newblock(blocks.grass.id, x, y);
             }
-            if (y < plainsblockheight) {
+            if (y > plainsblockheight) {
                 row[y] = blocks.newblock(blocks.dirt.id, x, y);
+            }
+            if (y > stoneblockheight) {
+                row[y] = blocks.newblock(blocks.stone.id, x, y);
             }
         });
     });
     debug.log("Finished Generating New Level", "gridgeneration");
     return grid;
+};
+level.setblock = (x, y, id) => {
+    level.grid[x][y] = blocks.newblock(id, x, y);
+    console.log("Hello, Wolrd!");
+    level.renderposition(x, y);
+};
+level.damageblock = (x, y, damage) => {
+    if (level.grid[x] != undefined && level.grid[x][y] != undefined) {
+        let block = level.grid[x][y];
+        block.health -= damage;
+        if (block.health <= 0) {
+            level.setblock(x, y, 0);
+        }
+    }
 };
 // Render Functions
 level.generateblock = (x, y) => {
@@ -62,13 +86,14 @@ level.generateblock = (x, y) => {
     div.style.height = String(blocks.blockheight) + "px";
     div.style.position = "absolute";
     div.style.left = `${x * blocks.blockwidth}px`;
-    div.style.top = `${(level.height - y) * blocks.blockheight}px`;
+    div.style.top = `${(y) * blocks.blockheight}px`;
     const image = createimage("/content/images/misc/unknown.png");
     image.classList.add("game-image");
     image.width = blocks.blockwidth;
     image.height = blocks.blockheight;
     div.appendChild(image);
     document.getElementById("grid")?.appendChild(div);
+    hooks.callhook("grid.render.block.created", div, image);
     return div;
 };
 level.generategrid = () => {
@@ -86,12 +111,14 @@ level.generategrid = () => {
     debug.time("general");
     level.rendergrid();
     debug.log("Finished Rendering Grid For The First Time", "general");
+    hooks.callhook("grid.render.blocks.created");
 };
 level.renderposition = (x, y) => {
     const div = level.gridelements[x][y];
     const image = div.getElementsByClassName("game-image")[0];
     const block = blocks.list[level.grid[x][y].id];
     image.src = block.images.idle.frames[0];
+    hooks.callhook("grid.render.block.updated", div, image);
 };
 level.rendergrid = () => {
     for (let y = 0; y < level.height; y++) {
@@ -99,4 +126,5 @@ level.rendergrid = () => {
             level.renderposition(x, y);
         }
     }
+    hooks.callhook("grid.render.blocks.updated");
 };

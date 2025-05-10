@@ -16,7 +16,7 @@ blocks.air.images.idle.frames = ["/content/images/blocks/air.png"]
 
 blocks.create("stone", 1)
 
-blocks.stone.strength = 4
+blocks.stone.strength = 5
 
 blocks.stone.images.idle.frames = ["/content/images/blocks/stone.png"]
 
@@ -24,7 +24,7 @@ blocks.stone.images.idle.frames = ["/content/images/blocks/stone.png"]
 
 blocks.create("dirt", 2)
 
-blocks.dirt.strength = 2.5
+blocks.dirt.strength = 3
 
 blocks.dirt.images.idle.frames = ["/content/images/blocks/dirt.png"]
 
@@ -32,6 +32,6 @@ blocks.dirt.images.idle.frames = ["/content/images/blocks/dirt.png"]
 
 blocks.create("grass", 3)
 
-blocks.grass.strength = 1
+blocks.grass.strength = 2
 
 blocks.grass.images.idle.frames = ["/content/images/blocks/grass.png"]

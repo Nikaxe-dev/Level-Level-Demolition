@@ -6,6 +6,9 @@ type defaulthooks =
     | "grid.render.blocks.created"
     | "grid.render.blocks.updated"
 
+    | "grid.render.block.created"
+    | "grid.render.block.updated"
+
     | "grid.update.blocks.set"
     | "grid.update.blocks.update"
 
@@ -24,7 +27,7 @@ interface hooksinterface {
 
     registerhook(name: defaulthooks): hookinterface
     registerhookcallback(name: defaulthooks, callback: hookconnection): undefined
-    callhook(name: defaulthooks): undefined
+    callhook(name: defaulthooks, ...args: any[]): undefined
 }
 
 const hooks = {} as hooksinterface
@@ -45,7 +48,7 @@ hooks.registerhookcallback = (name, callback) => {
     hooks.hooks[name]?.connections.push(callback)
 }
 
-hooks.callhook = (name, ...args: any[]) => {
+hooks.callhook = (name, ...args) => {
     for(const connection of hooks.hooks[name]?.connections as hookconnection[]) {
         connection(...args)
     }

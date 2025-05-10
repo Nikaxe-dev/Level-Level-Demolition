@@ -42,9 +42,10 @@ interface levelinterface {
     generateblock(x: number, y: number): HTMLDivElement
     renderposition(x: number, y: number): undefined
     rendergrid(): undefined
+
+    setblock(x: number, y: number, id: number): undefined
+    damageblock(x: number, y: number, damage: number): undefined
 }
-
-
 
 const level = {} as levelinterface
 
@@ -52,6 +53,15 @@ level.griddiv = document.getElementById("grid") as HTMLDivElement
 
 level.grid = []
 level.gridelements = []
+
+// Hooks
+
+hooks.registerhook("grid.render.blocks.created")
+hooks.registerhook("grid.render.blocks.updated")
+hooks.registerhook("grid.render.block.created")
+hooks.registerhook("grid.render.block.updated")
+hooks.registerhook("grid.update.blocks.set")
+hooks.registerhook("grid.update.blocks.update")
 
 // Grid Functions
 
@@ -96,15 +106,18 @@ level.generatelevel = (biome) => {
     grid.forEach((row, x) => {
         row.forEach((id, y) => {
             const plainsblockheight = Math.round(level.height * level.generationsettings.plainsheight)
-
-            console.log(plainsblockheight)
+            const stoneblockheight = Math.round(level.height * level.generationsettings.stoneheight)
 
             if(y == plainsblockheight) {
                 row[y] = blocks.newblock(blocks.grass.id, x, y)
             }
 
-            if(y < plainsblockheight) {
+            if(y > plainsblockheight) {
                 row[y] = blocks.newblock(blocks.dirt.id, x, y)
+            }
+
+            if(y > stoneblockheight) {
+                row[y] = blocks.newblock(blocks.stone.id, x, y)
             }
         })
     })
@@ -112,6 +125,26 @@ level.generatelevel = (biome) => {
     debug.log("Finished Generating New Level", "gridgeneration")
 
     return grid
+}
+
+level.setblock = (x, y, id) => {
+    level.grid[x][y] = blocks.newblock(id, x, y)
+
+    console.log("Hello, Wolrd!")
+
+    level.renderposition(x, y)
+}
+
+level.damageblock = (x, y, damage) => {
+    if(level.grid[x] != undefined && level.grid[x][y] != undefined) {
+        let block = level.grid[x][y]
+
+        block.health -= damage
+
+        if(block.health <= 0) {
+            level.setblock(x, y, 0)
+        }
+    }
 }
 
 // Render Functions
@@ -129,7 +162,7 @@ level.generateblock = (x, y) => {
 
     div.style.position = "absolute"
     div.style.left = `${x * blocks.blockwidth}px`
-    div.style.top = `${(level.height - y) * blocks.blockheight}px`
+    div.style.top = `${(y) * blocks.blockheight}px`
 
     const image = createimage("/content/images/misc/unknown.png")
     image.classList.add("game-image")
@@ -139,6 +172,8 @@ level.generateblock = (x, y) => {
     div.appendChild(image)
 
     document.getElementById("grid")?.appendChild(div)
+
+    hooks.callhook("grid.render.block.created", div, image)
 
     return div
 }
@@ -165,6 +200,8 @@ level.generategrid = () => {
     level.rendergrid()
 
     debug.log("Finished Rendering Grid For The First Time", "general")
+
+    hooks.callhook("grid.render.blocks.created")
 }
 
 level.renderposition = (x, y) => {
@@ -174,6 +211,8 @@ level.renderposition = (x, y) => {
     const block = blocks.list[level.grid[x][y].id]
 
     image.src = block.images.idle.frames[0]
+
+    hooks.callhook("grid.render.block.updated", div, image)
 }
 
 level.rendergrid = () => {
@@ -182,4 +221,6 @@ level.rendergrid = () => {
             level.renderposition(x, y)
         }
     }
+
+    hooks.callhook("grid.render.blocks.updated")
 }

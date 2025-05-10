@@ -17,9 +17,12 @@ player.friction = 0.95;
 player.frictiondown = 0.98;
 player.gravity = 0.3;
 player.bouncyness = 0.95;
-player.speedx = 1;
-player.speedy = 1;
+player.speedx = .35;
+player.speedy = .5;
 player.velocitymax = 10;
+player.drillstrength = 1;
+player.drilldestroywidth = 1;
+player.drilldestroyheight = 1;
 player.init = () => {
     const div = document.createElement("div");
     div.style.position = "absolute";
@@ -43,7 +46,7 @@ player.frame = () => {
     const image = player.div.getElementsByClassName("game-image")[0];
     player.yv -= player.gravity;
     const joystickx = (input.keydown("d") ? 1 : 0) - (input.keydown("a") ? 1 : 0);
-    const joysticky = (input.keydown("w") ? 1 : 0);
+    const joysticky = (input.keydown("w") ? 1 : 0) - (input.keydown("s") ? 0.5 : 0);
     player.xv += joystickx * player.speedx;
     player.yv += joysticky * player.speedy;
     player.xv *= player.friction;
@@ -55,16 +58,17 @@ player.frame = () => {
     }
     player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax);
     player.yv = Math.max(Math.min(player.yv, player.velocitymax), -player.velocitymax);
-    player.rv = (Math.atan2(-player.yv, player.xv) * (180 / Math.PI) - player.rotation) / 5;
+    player.rv = (Math.atan2(-player.yv, player.xv) * (180 / Math.PI) - player.rotation) / 10;
     player.x += player.xv;
     player.y += player.yv;
     level.gridelements.forEach((row, x) => {
         row.forEach((block, y) => {
-            if (level.grid[x][y].docollide) {
+            const blockdata = level.grid[x][y];
+            if (blockdata.docollide) {
                 const blockboundingrect = block.getBoundingClientRect();
                 const blockasobject = {
                     x: x * blocks.blockwidth,
-                    y: -((y + 15) * blocks.blockheight),
+                    y: -((y) * blocks.blockheight),
                     width: blockboundingrect.width,
                     height: blockboundingrect.height
                 };
@@ -74,6 +78,12 @@ player.frame = () => {
                 const colliding = () => touchingobject({ x: player.x, y: player.y, width: player.hitboxwidth, height: player.hitboxheight }, blockasobject);
                 for (let stepi = 0; stepi < player.collisionsteps; stepi++) {
                     if (colliding()) {
+                        level.damageblock(x, y, player.drillstrength);
+                        for (let offsetX = -Math.floor(player.drilldestroywidth / 2); offsetX <= Math.floor(player.drilldestroywidth / 2); offsetX++) {
+                            for (let offsetY = -Math.floor(player.drilldestroyheight / 2); offsetY <= Math.floor(player.drilldestroyheight / 2); offsetY++) {
+                                level.damageblock(x + offsetX, y + offsetY, player.drillstrength);
+                            }
+                        }
                         player.y += -player.yv;
                         if (colliding()) {
                             player.y += player.yv;
