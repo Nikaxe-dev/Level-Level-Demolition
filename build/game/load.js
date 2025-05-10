@@ -3,32 +3,32 @@
 "use strict";
 const loadscripts = {
     "Common Scripts": [
-        "/build/core/common/loadscript.js",
-        "/build/core/common/choose.js",
-        "/build/core/common/image.js",
-        "/build/core/common/table.js",
-        "/build/core/common/wait.js",
-        "/build/core/common/collision.js",
+        "../build/core/common/loadscript.js",
+        "../build/core/common/choose.js",
+        "../build/core/common/image.js",
+        "../build/core/common/table.js",
+        "../build/core/common/wait.js",
+        "../build/core/common/collision.js",
     ],
     "Pre-Core Configuration Scripts": [
-        "/build/config/layers.js"
+        "../build/config/layers.js"
     ],
     "Core Scripts": [
-        "/build/core/objects/game.js",
-        "/build/core/objects/hooks.js",
-        "/build/core/objects/input.js",
-        "/build/core/objects/blocks.js",
-        "/build/core/objects/level.js",
-        "/build/core/objects/camera.js",
-        "/build/core/objects/player.js",
+        "../build/core/objects/game.js",
+        "../build/core/objects/hooks.js",
+        "../build/core/objects/input.js",
+        "../build/core/objects/blocks.js",
+        "../build/core/objects/level.js",
+        "../build/core/objects/camera.js",
+        "../build/core/objects/player.js",
     ],
     "Post-Core Configuration Scripts": [
-        "/build/config/blocksettings.js",
-        "/build/config/blocktypes.js",
-        "/build/config/levelconfig.js",
+        "../build/config/blocksettings.js",
+        "../build/config/blocktypes.js",
+        "../build/config/levelconfig.js",
     ],
     "Game Scripts": [
-        "/build/game/main.js",
+        "../build/game/main.js",
     ],
 };
 function loadscriptpromise(url) {
