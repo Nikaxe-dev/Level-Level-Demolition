@@ -3,8 +3,8 @@ function createimage(url: string): HTMLImageElement {
 
     img.onerror = () => {
         const path = new URL(img.src).pathname; // Extract only the path
-        console.error(`Cannot find image: '${path}', replacing it with '/content/images/misc/unknown.png'`)
-        img.src = "/content/images/misc/unknown.png"
+        console.error(`Cannot find image: '${path}', replacing it with '../content/images/misc/unknown.png'`)
+        img.src = "../content/images/misc/unknown.png"
     }
 
     img.src = url

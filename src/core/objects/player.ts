@@ -68,7 +68,7 @@ player.init = () => {
     div.style.width = `${player.width}px`
     div.style.height = `${player.height}px`
 
-    const image = createimage("/content/images/gameobjects/player.png")
+    const image = createimage("../content/images/gameobjects/player.png")
     image.classList.add("game-image")
     image.width = player.width
     image.height = player.height
