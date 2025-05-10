@@ -15,6 +15,7 @@ interface blockdatainterface {
 
     ignore: boolean
     transparent: boolean
+    docollide: boolean
 }
 
 interface imagesinterface {
@@ -66,6 +67,7 @@ blocks.create = (name, id) => {
     block.strength = 1
     block.ignore = false
     block.transparent = false
+    block.docollide = true
 
     block.images = {} as imagesinterface
 

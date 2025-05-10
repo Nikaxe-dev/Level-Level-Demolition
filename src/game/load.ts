@@ -4,11 +4,12 @@ interface loadscriptsinterface {
 
 const loadscripts: loadscriptsinterface = {
     "Common Scripts": [
+        "/build/core/common/loadscript.js",
         "/build/core/common/choose.js",
         "/build/core/common/image.js",
         "/build/core/common/table.js",
         "/build/core/common/wait.js",
-        "/build/core/common/loadscript.js",
+        "/build/core/common/collision.js",
     ],
 
     "Pre-Core Configuration Scripts": [

@@ -8,6 +8,7 @@ blocks.air.strength = 0
 
 blocks.air.ignore = true
 blocks.air.transparent = true
+blocks.air.docollide = false
 
 blocks.air.images.idle.frames = ["/content/images/blocks/air.png"]
 

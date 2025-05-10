@@ -2,8 +2,11 @@
 
 "use strict";
 const player = {};
-player.x = 0;
+player.x = -100;
 player.y = 0;
+player.hitboxwidth = 32;
+player.hitboxheight = 32;
+player.collisionsteps = 1;
 player.width = 32;
 player.height = 64;
 player.xv = 0;
@@ -13,6 +16,7 @@ player.rv = 0;
 player.friction = 0.95;
 player.frictiondown = 0.98;
 player.gravity = 0.3;
+player.bouncyness = 0.95;
 player.speedx = 1;
 player.speedy = 1;
 player.velocitymax = 10;
@@ -54,6 +58,43 @@ player.frame = () => {
     player.rv = (Math.atan2(-player.yv, player.xv) * (180 / Math.PI) - player.rotation) / 5;
     player.x += player.xv;
     player.y += player.yv;
+    level.gridelements.forEach((row, x) => {
+        row.forEach((block, y) => {
+            if (blocks.list[level.grid[x][y]].docollide) {
+                const blockboundingrect = block.getBoundingClientRect();
+                const blockasobject = {
+                    x: x * blocks.blockwidth,
+                    y: -((y + 15) * blocks.blockheight),
+                    width: blockboundingrect.width,
+                    height: blockboundingrect.height
+                };
+                if (level.grid[x][y] == 0) {
+                    console.log("aaaaa");
+                }
+                const colliding = () => touchingobject({ x: player.x, y: player.y, width: player.hitboxwidth, height: player.hitboxheight }, blockasobject);
+                for (let stepi = 0; stepi < player.collisionsteps; stepi++) {
+                    if (colliding()) {
+                        player.y += -player.yv;
+                        if (colliding()) {
+                            player.y += player.yv;
+                            player.x += -player.xv;
+                            player.xv *= -player.bouncyness;
+                            if (colliding()) {
+                                player.y += -player.yv;
+                                player.yv *= -player.bouncyness;
+                            }
+                        }
+                        else {
+                            player.yv *= -player.bouncyness;
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+        });
+    });
     player.rotation += player.rv;
     camera.x += (player.x - ((window.innerWidth / ((camera.zoom / 100))) / 2) - camera.x) / 2;
     camera.y += (player.y + ((window.innerHeight / ((camera.zoom / 100))) / 2) - camera.y) / 2;

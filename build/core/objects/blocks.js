@@ -10,6 +10,7 @@ blocks.create = (name, id) => {
     block.strength = 1;
     block.ignore = false;
     block.transparent = false;
+    block.docollide = true;
     block.images = {};
     block.images.idle = {
         speed: 1,
