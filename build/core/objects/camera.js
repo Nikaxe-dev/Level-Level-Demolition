@@ -12,6 +12,7 @@ game.style.transformOrigin = "0 0";
 camera.logic = () => {
     camera.x += camera.xv;
     camera.y += camera.yv;
+    camera.zoom = 75 * ((window.innerWidth + window.innerHeight) / 1471);
 };
 camera.render = () => {
     game.style.transform = `translate(${-camera.x * (camera.zoom / 100)}px, ${camera.y * (camera.zoom / 100)}px) scale(${camera.zoom / 100})`;

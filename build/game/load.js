@@ -16,6 +16,7 @@ const loadscripts = {
     "Core Scripts": [
         "../build/core/objects/game.js",
         "../build/core/objects/hooks.js",
+        "../build/core/objects/state.js",
         "../build/core/objects/input.js",
         "../build/core/objects/blocks.js",
         "../build/core/objects/level.js",

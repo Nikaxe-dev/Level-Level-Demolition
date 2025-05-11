@@ -12,6 +12,12 @@ type defaulthooks =
     | "grid.update.blocks.set"
     | "grid.update.blocks.update"
 
+    | "state.changed"
+
+    | "player.died"
+    | "player.reset"
+    | "player.initialized"
+
     | (string & {})
 
 type hookconnection = ((...args: any[]) => undefined)
