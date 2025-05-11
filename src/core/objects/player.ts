@@ -10,6 +10,8 @@ interface playerinterface {
     friction: number
     frictiondown: number
     bouncyness: number
+    bounceplusx: number
+    bounceplusy: number
     gravity: number
     speedx: number
     speedy: number
@@ -33,10 +35,10 @@ interface playerinterface {
 
 const player = {} as playerinterface
 
-player.x = -100
+player.x = 0
 player.y = 0
 
-player.hitboxwidth = 32
+player.hitboxwidth = 24
 player.hitboxheight = 32
 player.collisionsteps = 1
 
@@ -48,8 +50,13 @@ player.rotation = 0
 player.rv = 0
 player.friction = 0.95
 player.frictiondown = 0.98
-player.gravity = 0.3
+player.gravity = 0.2
+
 player.bouncyness = 0.95
+
+player.bounceplusx = 5
+player.bounceplusy = 2.5
+
 player.speedx = .35
 player.speedy = .5
 player.velocitymax = 10
@@ -89,7 +96,7 @@ player.frame = () => {
     player.yv -= player.gravity
 
     const joystickx = (input.keydown("d") ? 1 : 0) - (input.keydown("a") ? 1 : 0)
-    const joysticky = (input.keydown("w") ? 1 : 0) - (input.keydown("s") ? 0.5 : 0)
+    const joysticky = (input.keydown("w") ? 1 : 0)
 
     player.xv += joystickx * player.speedx
     player.yv += joysticky * player.speedy
@@ -104,10 +111,19 @@ player.frame = () => {
 
     player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax)
     player.yv = Math.max(Math.min(player.yv, player.velocitymax), -player.velocitymax)
-    player.rv = (Math.atan2(-player.yv, player.xv) * (180 / Math.PI) - player.rotation) / 10
 
     player.x += player.xv
     player.y += player.yv
+
+    const rect = player.div.getBoundingClientRect()
+    const playerCenterX = rect.left + rect.width / 2
+    const playerCenterY = rect.top + rect.height / 2
+
+    const mouseX = input.mouse.screenx
+    const mouseY = input.mouse.screeny
+
+    const angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX)
+    player.rotation = angle * (180 / Math.PI)
 
     level.gridelements.forEach((row, x) => {
         row.forEach((block, y) => {
@@ -121,10 +137,6 @@ player.frame = () => {
                     y: -((y) * blocks.blockheight),
                     width: blockboundingrect.width,
                     height: blockboundingrect.height
-                }
-
-                if(level.grid[x][y].id == 0) {
-                    console.log("aaaaa")
                 }
 
                 const colliding = () => touchingobject({x:player.x,y:player.y,width:player.hitboxwidth,height:player.hitboxheight}, blockasobject)
@@ -142,19 +154,25 @@ player.frame = () => {
 
                         player.y += -player.yv
 
+                        let bounceplusx = (player.xv < 0 ? 1 : -1) * player.bounceplusx
+                        let bounceplusy = (player.yv < 0 ? 1 : -1) * player.bounceplusy
+
                         if(colliding()) {
                             player.y += player.yv
 
                             player.x += -player.xv
 
                             player.xv *= -player.bouncyness
+                            player.xv += bounceplusx
 
                             if(colliding()) {
                                 player.y += -player.yv
                                 player.yv *= -player.bouncyness
+                                player.yv += bounceplusy
                             }
                         } else {
                             player.yv *= -player.bouncyness
+                            player.yv += bounceplusy
                         }
                     } else {
                         break

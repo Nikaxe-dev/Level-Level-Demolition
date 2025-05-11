@@ -4,8 +4,20 @@
 const input = {};
 input.keyboard = {};
 input.mouse = {
-    x: 0,
-    y: 0,
+    screenx: 0,
+    screeny: 0,
+    get x() {
+        return this.screenx + camera.y;
+    },
+    get y() {
+        return this.screeny + camera.x;
+    },
+    get truex() {
+        return this.x - window.innerWidth;
+    },
+    get truey() {
+        return this.y + window.innerHeight;
+    },
     button1down: false,
     button2down: false,
     button3down: false,
@@ -51,9 +63,9 @@ input.beginlisten = () => {
             input.mouse.scrollwheelvelocity = 0;
         }, 50);
     });
-    document.body.onmousemove = (e) => {
-        input.mouse.x = e.clientX;
-        input.mouse.y = e.clientY;
-    };
+    addEventListener("mousemove", (e) => {
+        input.mouse.screenx = e.clientX;
+        input.mouse.screeny = e.clientY;
+    });
     debug.log("Finished Beginning Listen For Input", "inputsetup");
 };

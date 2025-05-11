@@ -63,7 +63,6 @@ level.generatelevel = (biome) => {
 };
 level.setblock = (x, y, id) => {
     level.grid[x][y] = blocks.newblock(id, x, y);
-    console.log("Hello, Wolrd!");
     level.renderposition(x, y);
 };
 level.damageblock = (x, y, damage) => {

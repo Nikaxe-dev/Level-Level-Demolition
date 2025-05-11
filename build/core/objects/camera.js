@@ -3,7 +3,7 @@
 "use strict";
 const camera = {};
 camera.zoom = 75;
-camera.x = 0;
+camera.x = -500;
 camera.y = 0;
 camera.xv = 0;
 camera.yv = 0;
