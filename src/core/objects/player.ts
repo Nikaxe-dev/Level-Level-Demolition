@@ -31,12 +31,12 @@ interface playerinterface {
 
     collide: boolean
 
-    maxdurability: number
+    maxlifespan: number
     defense: number
-    durability: number
+    lifespan: number
 
-    durabilityloseinterval: number
-    durabilitylose: number
+    lifespanloseinterval: number
+    lifespanlose: number
 
     init(): undefined
     frame(): undefined
@@ -69,8 +69,9 @@ player.drillstrength = 1
 player.drilldestroywidth = 1
 player.drilldestroyheight = 1
 
-player.durabilitylose = 1
-player.maxdurability = 10000
+player.lifespanlose = 2
+player.maxlifespan = 100
+player.defense = 1
 
 player.collide = true
 
@@ -85,12 +86,17 @@ player.die = () => {
 
     states.state = "dead"
 
-    clearInterval(player.durabilityloseinterval)
+    clearInterval(player.lifespanloseinterval)
+
+    level.grid = level.generatelevel("plains")
+    level.rendergrid()
 
     player.reset()
 }
 
 player.reset = () => {
+    states.state = "game"
+
     player.x = (level.width / 2) * blocks.blockwidth
     player.y = 0
 
@@ -99,14 +105,14 @@ player.reset = () => {
     player.rotation = 0
     player.rv = 0
 
-    player.durability = player.maxdurability
+    player.lifespan = player.maxlifespan
 
-    // Lose drill durability
+    // Lose drill lifespan
 
-    player.durabilityloseinterval = setInterval(() => {
-        player.durability -= player.durabilitylose / 10
+    player.lifespanloseinterval = setInterval(() => {
+        player.lifespan -= player.lifespanlose / 10
 
-        if(player.durability < 0) {
+        if(player.lifespan < 0) {
             player.die()
         }
     }, 100);
@@ -205,6 +211,12 @@ player.frame = () => {
                                 for (let offsetX = -Math.floor(player.drilldestroywidth / 2); offsetX <= Math.floor(player.drilldestroywidth / 2); offsetX++) {
                                     for (let offsetY = -Math.floor(player.drilldestroyheight / 2); offsetY <= Math.floor(player.drilldestroyheight / 2); offsetY++) {
                                         level.damageblock(x + offsetX, y + offsetY, player.drillstrength);
+
+                                        const blockdata = level.grid[x][y]
+
+                                        if(player.defense < blockdata.strength) {
+                                            player.lifespan -= blockdata.strength * (1 - ((player.defense - 1) / blockdata.strength))
+                                        }
                                     }
                                 }
                             }
@@ -251,14 +263,26 @@ player.frame = () => {
     player.rotation += player.rv
 
     if(states.state == "game" || states.state == "dead") {
-        const camerax = Math.min(Math.max(player.x - (window.innerWidth / ((camera.zoom / 100)) / 2), 11), ((level.width - 39.6) * blocks.blockwidth) - 2)
-        const cameray = Math.max(player.y + (window.innerHeight / ((camera.zoom / 100)) / 2), -((level.height - 21) * blocks.blockheight))
+        const deadzoneheight = 25
 
-        camera.x += (camerax - camera.x) / 5
-        camera.y += (cameray - camera.y) / 5
+        const targetcamerax = Math.min(
+            Math.max(player.x - (0 / ((camera.zoom / 100)) / 2), blocks.blockwidth * 20.5),
+            ((level.width - 20.5) * blocks.blockwidth) - 2
+        )
+
+        const targetcameray = Math.max(
+            player.y + (0 / ((camera.zoom / 100)) / 2),
+            -((level.height - 11) * blocks.blockheight)
+        )
+
+        camera.x += (targetcamerax - camera.x) / 5
+
+        if (Math.abs(camera.y - targetcameray) > deadzoneheight) {
+            camera.y += (targetcameray - camera.y) / 10
+        } else {
+            camera.y += (targetcameray - camera.y) / 17.5
+        }
     }
-
-    //console.log(player.durability)
 
     div.style.left = `${player.x}px`
     div.style.top = `${-player.y}px`

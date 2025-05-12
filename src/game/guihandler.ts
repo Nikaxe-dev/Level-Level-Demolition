@@ -1,0 +1,1 @@
+guilifespanbar.init()

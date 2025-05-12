@@ -33,6 +33,10 @@ const loadscripts: loadscriptsinterface = {
         "../build/config/levelconfig.js",
     ],
 
+    "Gui Scripts": [
+        "../build/core/objects/gui/lifespanbar.js"
+    ],
+
     "Game Scripts": [
         "../build/game/main.js",
     ],
