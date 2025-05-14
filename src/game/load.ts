@@ -33,6 +33,7 @@ const loadscripts: loadscriptsinterface = {
         "../build/config/blocksettings.js",
         "../build/config/blocktypes.js",
         "../build/config/levelconfig.js",
+        "../build/config/moredebug.js",
     ],
 
     "Gui Scripts": [

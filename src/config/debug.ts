@@ -21,6 +21,10 @@ type debuglog =
     | "inputsetup"
     | "inputdebug"
 
+    // States
+
+    | "state"
+
     // Errors
 
     | "unknownerror"
@@ -123,6 +127,8 @@ debug.loglist = [
 
     "unknownerror",
     "longwarning",
+
+    "state",
 ]
 
 // || CUSTOM LOGTYPES ||

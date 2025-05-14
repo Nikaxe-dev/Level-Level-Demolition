@@ -5,8 +5,9 @@ const states = {};
 hooks.registerhook("state.changed");
 Object.defineProperty(states, "state", {
     set: (value) => {
+        const before = states.state;
         states.statevalue = value;
-        hooks.callhook("state.changed", value);
+        hooks.callhook("state.changed", value, before);
     },
     get: () => {
         return states.statevalue;

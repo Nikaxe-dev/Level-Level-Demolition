@@ -29,6 +29,7 @@ const loadscripts = {
         "../build/config/blocksettings.js",
         "../build/config/blocktypes.js",
         "../build/config/levelconfig.js",
+        "../build/config/moredebug.js",
     ],
     "Gui Scripts": [
         "../build/core/objects/gui/gui.js",

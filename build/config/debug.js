@@ -61,6 +61,7 @@ debug.loglist = [
     "inputdebug",
     "unknownerror",
     "longwarning",
+    "state",
 ];
 // || CUSTOM LOGTYPES ||
 //  For custom logtypes you dont need to change anything in this file.

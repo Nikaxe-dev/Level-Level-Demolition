@@ -22,8 +22,10 @@ player.reset = () => {
     player.yv = 0;
     player.rotation = 0;
     player.rv = 0;
-    player.hitboxwidth = 24;
+    player.hitboxwidth = 16;
     player.hitboxheight = 32;
+    player.breakhitboxwidth = 24;
+    player.breakhitboxheight = 24;
     player.collisionsteps = 1;
     player.width = 32;
     player.height = 64;
@@ -43,6 +45,7 @@ player.reset = () => {
     player.maxlifespan = 100;
     player.defense = 1;
     player.collide = true;
+    player.showhitbox = true;
     player.lifespan = player.maxlifespan;
     gui.died.style.display = "none";
     if (player.timesreset > 0) {
@@ -73,9 +76,27 @@ player.init = () => {
     image.classList.add("game-image");
     image.width = player.width;
     image.height = player.height;
+    const hitboxvisual = document.createElement("div");
+    hitboxvisual.style.display = player.showhitbox ? "" : "none";
+    hitboxvisual.id = "player-hitbox";
+    hitboxvisual.style.position = "absolute";
+    hitboxvisual.style.left = `${player.x}px`;
+    hitboxvisual.style.top = `${player.y}px`;
+    hitboxvisual.style.backgroundColor = "rgb(0, 0, 0)";
+    game.appendChild(hitboxvisual);
+    const breakhitboxvisual = document.createElement("div");
+    breakhitboxvisual.style.display = player.showhitbox ? "" : "none";
+    breakhitboxvisual.id = "player-break-hitbox";
+    breakhitboxvisual.style.position = "absolute";
+    breakhitboxvisual.style.left = `${player.x}px`;
+    breakhitboxvisual.style.top = `${player.y}px`;
+    breakhitboxvisual.style.backgroundColor = "rgb(255, 0, 0)";
+    game.appendChild(breakhitboxvisual);
     div.appendChild(image);
     game.appendChild(div);
     player.div = div;
+    player.hitboxvisual = hitboxvisual;
+    player.breakhitboxvisual = breakhitboxvisual;
     hooks.callhook("player.initialized");
     player.frame();
 };
@@ -100,6 +121,8 @@ player.frame = () => {
     player.yv = Math.max(Math.min(player.yv, player.velocitymax), -player.velocitymax * 1.5);
     player.x += player.xv;
     player.y += player.yv;
+    player.breakhitboxx = player.x + getdirectionvector(player.rotation).x * 20;
+    player.breakhitboxy = player.y - getdirectionvector(player.rotation).y * 20;
     const rect = player.div.getBoundingClientRect();
     const playerCenterX = rect.left + rect.width / 2;
     const playerCenterY = rect.top + rect.height / 2;
@@ -125,16 +148,19 @@ player.frame = () => {
                         height: blockboundingrect.height
                     };
                     const colliding = () => touchingobject({ x: player.x, y: player.y, width: player.hitboxwidth, height: player.hitboxheight }, blockasobject);
+                    const breakcolliding = () => touchingobject({ x: player.breakhitboxx, y: player.breakhitboxy, width: player.breakhitboxwidth, height: player.breakhitboxheight }, blockasobject);
                     for (let stepi = 0; stepi < player.collisionsteps; stepi++) {
                         if (colliding()) {
                             if (states.state == "game") {
                                 //level.damageblock(x, y, player.drillstrength)
-                                for (let offsetX = -Math.floor(player.drilldestroywidth / 2); offsetX <= Math.floor(player.drilldestroywidth / 2); offsetX++) {
-                                    for (let offsetY = -Math.floor(player.drilldestroyheight / 2); offsetY <= Math.floor(player.drilldestroyheight / 2); offsetY++) {
-                                        level.damageblock(x + offsetX, y + offsetY, player.drillstrength);
-                                        const blockdata = level.grid[x][y];
-                                        if (player.defense < blockdata.strength) {
-                                            player.lifespan -= blockdata.strength * (1 - ((player.defense - 1) / blockdata.strength));
+                                if (breakcolliding()) {
+                                    for (let offsetX = -Math.floor(player.drilldestroywidth / 2); offsetX <= Math.floor(player.drilldestroywidth / 2); offsetX++) {
+                                        for (let offsetY = -Math.floor(player.drilldestroyheight / 2); offsetY <= Math.floor(player.drilldestroyheight / 2); offsetY++) {
+                                            level.damageblock(x + offsetX, y + offsetY, player.drillstrength);
+                                            const blockdata = level.grid[x][y];
+                                            if (player.defense < blockdata.strength) {
+                                                player.lifespan -= blockdata.strength * (1 - ((player.defense - 1) / blockdata.strength));
+                                            }
                                         }
                                     }
                                 }
@@ -146,16 +172,31 @@ player.frame = () => {
                                 player.y += player.yv;
                                 player.x += -player.xv;
                                 player.xv *= -player.bouncyness;
-                                player.xv += states.state == "game" ? bounceplusx : 0;
+                                if (breakcolliding()) {
+                                    player.xv += states.state == "game" ? bounceplusx : 0;
+                                }
+                                else {
+                                    player.xv += states.state == "game" ? bounceplusx / 3 : 0;
+                                }
                                 if (colliding()) {
                                     player.y += -player.yv;
                                     player.yv *= -player.bouncyness;
-                                    player.yv += states.state == "game" ? bounceplusy : 0;
+                                    if (breakcolliding()) {
+                                        player.yv += states.state == "game" ? bounceplusy : 0;
+                                    }
+                                    else {
+                                        player.yv += states.state == "game" ? bounceplusy / 3 : 0;
+                                    }
                                 }
                             }
                             else {
                                 player.yv *= -player.bouncyness;
-                                player.yv += states.state == "game" ? bounceplusy : 0;
+                                if (breakcolliding()) {
+                                    player.yv += states.state == "game" ? bounceplusy : 0;
+                                }
+                                else {
+                                    player.yv += states.state == "game" ? bounceplusy / 3 : 0;
+                                }
                             }
                         }
                         else {
@@ -187,5 +228,16 @@ player.frame = () => {
     div.style.left = `${player.x}px`;
     div.style.top = `${-player.y}px`;
     div.style.transform = `rotate(${player.rotation - 90}deg)`;
+    div.style.zIndex = String(layers["player.drill"]);
+    player.hitboxvisual.style.left = `${player.x + player.hitboxwidth / 2}px`;
+    player.hitboxvisual.style.top = `${-player.y + player.hitboxheight / 2}px`;
+    player.hitboxvisual.style.width = `${player.hitboxwidth}px`;
+    player.hitboxvisual.style.height = `${player.hitboxheight}px`;
+    player.breakhitboxvisual.style.left = `${player.breakhitboxx + player.breakhitboxwidth / 4}px`;
+    player.breakhitboxvisual.style.top = `${-player.breakhitboxy + player.height / 2}px`;
+    player.breakhitboxvisual.style.width = `${player.breakhitboxwidth}px`;
+    player.breakhitboxvisual.style.height = `${player.breakhitboxheight}px`;
+    player.breakhitboxvisual.style.zIndex = String(layers["player.breakhitbox"]);
+    player.hitboxvisual.style.zIndex = String(layers["player.hitbox"]);
     requestAnimationFrame(player.frame);
 };
