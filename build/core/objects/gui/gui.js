@@ -1,4 +1,5 @@
 // Scripts created by Nikaxe and compiled from typescript to javascript.
 
 "use strict";
-gui.lifespanbar.init();
+const gui = {};
+gui.died = document.getElementById("died");

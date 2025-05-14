@@ -34,7 +34,7 @@ interface levelinterface {
     gridelements: gridelements
     griddiv: HTMLDivElement
 
-    generatelevel(biome: biome): grid
+    generatelevel(biome: biome, seed: number): grid
     generateblankgrid(): grid
     outputgrid(grid: grid): string
 
@@ -97,27 +97,36 @@ level.generateblankgrid = () => {
     return blanklevel
 }
 
-level.generatelevel = (biome) => {
+level.generatelevel = (biome, seed) => {
     debug.log("Generating New Level", "gridgeneration")
     debug.time("gridgeneration")
 
     const grid = level.generateblankgrid()
+
+    const random = randomseed(seed)
+
+    let layer1height = Math.round(level.height * level.generationsettings.plainsheight)
+    let layer2height = Math.round(level.height * level.generationsettings.stoneheight)
     
     grid.forEach((row, x) => {
+        layer1height += Math.round((random() * 2) - 1)
+        layer1height = Math.min(layer2height - 3, layer1height)
+
+        layer2height += Math.round((random() * 2) - 1)
+
         row.forEach((id, y) => {
-            const plainsblockheight = Math.round(level.height * level.generationsettings.plainsheight)
-            const stoneblockheight = Math.round(level.height * level.generationsettings.stoneheight)
+            if(biome == "plains") {
+                if(y == layer1height) {
+                    row[y] = blocks.newblock(blocks.grass.id, x, y)
+                }
 
-            if(y == plainsblockheight) {
-                row[y] = blocks.newblock(blocks.grass.id, x, y)
-            }
+                if(y > layer1height) {
+                    row[y] = blocks.newblock(blocks.dirt.id, x, y)
+                }
 
-            if(y > plainsblockheight) {
-                row[y] = blocks.newblock(blocks.dirt.id, x, y)
-            }
-
-            if(y > stoneblockheight) {
-                row[y] = blocks.newblock(blocks.stone.id, x, y)
+                if(y > layer2height) {
+                    row[y] = blocks.newblock(blocks.stone.id, x, y)
+                }
             }
         })
     })

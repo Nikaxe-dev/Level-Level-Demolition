@@ -10,6 +10,8 @@ const loadscripts: loadscriptsinterface = {
         "../build/core/common/table.js",
         "../build/core/common/wait.js",
         "../build/core/common/collision.js",
+        "../build/core/common/math.js",
+        "../build/core/common/random.js",
     ],
 
     "Pre-Core Configuration Scripts": [
@@ -34,6 +36,7 @@ const loadscripts: loadscriptsinterface = {
     ],
 
     "Gui Scripts": [
+        "../build/core/objects/gui/gui.js",
         "../build/core/objects/gui/lifespanbar.js"
     ],
 

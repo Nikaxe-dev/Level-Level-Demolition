@@ -9,6 +9,8 @@ const loadscripts = {
         "../build/core/common/table.js",
         "../build/core/common/wait.js",
         "../build/core/common/collision.js",
+        "../build/core/common/math.js",
+        "../build/core/common/random.js",
     ],
     "Pre-Core Configuration Scripts": [
         "../build/config/layers.js"
@@ -29,6 +31,7 @@ const loadscripts = {
         "../build/config/levelconfig.js",
     ],
     "Gui Scripts": [
+        "../build/core/objects/gui/gui.js",
         "../build/core/objects/gui/lifespanbar.js"
     ],
     "Game Scripts": [

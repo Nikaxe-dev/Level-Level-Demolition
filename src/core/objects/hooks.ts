@@ -20,30 +20,34 @@ type defaulthooks =
 
     | (string & {})
 
-type hookconnection = ((...args: any[]) => undefined)
+type hookconnection = ((...args: any[]) => undefined | void)
 
 interface hookinterface {
     connections: hookconnection[]
+
+    calltimes: number
 }
 
 interface hooksinterface {
     hooks: {
-        [key in defaulthooks]?: hookinterface
+        [key in Extract<defaulthooks, string>]?: hookinterface
     }
 
     registerhook(name: defaulthooks): hookinterface
     registerhookcallback(name: defaulthooks, callback: hookconnection): undefined
     callhook(name: defaulthooks, ...args: any[]): undefined
+    gethookcalltimes(name: defaulthooks): number
 }
 
 const hooks = {} as hooksinterface
 
 hooks.hooks = {}
 
-hooks.registerhook = (name) => {
+hooks.registerhook = (name): hookinterface => {
     const hook = {} as hookinterface
     
     hook.connections = []
+    hook.calltimes = 0
 
     hooks.hooks[name] = hook
 
@@ -58,6 +62,14 @@ hooks.callhook = (name, ...args) => {
     for(const connection of hooks.hooks[name]?.connections as hookconnection[]) {
         connection(...args)
     }
+
+    if(hooks.hooks[name]?.calltimes) {
+        hooks.hooks[name].calltimes += 1
+    }
+}
+
+hooks.gethookcalltimes = (name) => {
+    return hooks.hooks[name]?.calltimes ? hooks.hooks[name]?.calltimes : 0
 }
 
 hooks.registerhook("game.scripts.loaded")

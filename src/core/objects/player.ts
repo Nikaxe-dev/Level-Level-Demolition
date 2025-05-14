@@ -1,3 +1,5 @@
+type playerinventoryinterface = blockdatainterface[]
+
 interface playerinterface {
     x: number
     y: number
@@ -38,6 +40,10 @@ interface playerinterface {
     lifespanloseinterval: number
     lifespanlose: number
 
+    inventory: playerinventoryinterface
+
+    timesreset: number
+
     init(): undefined
     frame(): undefined
     reset(): undefined
@@ -46,34 +52,7 @@ interface playerinterface {
 
 const player = {} as playerinterface
 
-player.hitboxwidth = 24
-player.hitboxheight = 32
-player.collisionsteps = 1
-
-player.width = 32
-player.height = 64
-player.friction = 0.9
-player.frictiondown = 0.98
-player.gravity = 0.15
-
-player.bouncyness = 0.95
-
-player.bounceplusx = 5
-player.bounceplusy = 4
-
-player.speedx = .35
-player.speedy = .45
-player.velocitymax = 10
-
-player.drillstrength = 1
-player.drilldestroywidth = 1
-player.drilldestroyheight = 1
-
-player.lifespanlose = 2
-player.maxlifespan = 100
-player.defense = 1
-
-player.collide = true
+player.timesreset = 0
 
 // Hooks
 
@@ -88,24 +67,60 @@ player.die = () => {
 
     clearInterval(player.lifespanloseinterval)
 
-    level.grid = level.generatelevel("plains")
-    level.rendergrid()
+    gui.died.style.display = ""
 
-    player.reset()
+    // player.reset()
 }
 
 player.reset = () => {
     states.state = "game"
 
     player.x = (level.width / 2) * blocks.blockwidth
-    player.y = 0
+    player.y = 5
 
     player.xv = 0
     player.yv = 0
     player.rotation = 0
     player.rv = 0
 
+    player.hitboxwidth = 24
+    player.hitboxheight = 32
+
+    player.collisionsteps = 1
+
+    player.width = 32
+    player.height = 64
+    player.friction = 0.9
+    player.frictiondown = 0.98
+    player.gravity = 0.15
+
+    player.bouncyness = 0.95
+
+    player.bounceplusx = 5
+    player.bounceplusy = 4
+
+    player.speedx = .35
+    player.speedy = .45
+    player.velocitymax = 10
+
+    player.drillstrength = 1
+    player.drilldestroywidth = 1
+    player.drilldestroyheight = 1
+
+    player.lifespanlose = 2
+    player.maxlifespan = 100
+    player.defense = 1
+
+    player.collide = true
+
     player.lifespan = player.maxlifespan
+
+    gui.died.style.display = "none"
+
+    if(player.timesreset > 0) {
+        level.grid = level.generatelevel("plains", generateseed())
+        level.rendergrid()
+    }
 
     // Lose drill lifespan
 
@@ -117,10 +132,14 @@ player.reset = () => {
         }
     }, 100);
 
+    player.timesreset += 1
+
     hooks.callhook("player.reset")
 }
 
 player.init = () => {
+    player.reset()
+
     const div = document.createElement("div")
     div.style.position = "absolute"
     div.style.left = `${player.x}px`
@@ -141,8 +160,6 @@ player.init = () => {
 
     player.div = div
 
-    player.reset()
-
     hooks.callhook("player.initialized")
 
     player.frame()
@@ -160,14 +177,14 @@ player.frame = () => {
 
         player.xv += joystickx * player.speedx
         player.yv += joysticky * player.speedy
+    }
 
         player.xv *= player.friction
 
-        if(player.yv > 0) {
-            player.yv *= player.friction
-        } else {
-            player.yv *= player.frictiondown
-        }
+    if(player.yv > 0) {
+        player.yv *= player.friction
+    } else {
+        player.yv *= player.frictiondown
     }
 
     player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax)
@@ -184,7 +201,14 @@ player.frame = () => {
     const mouseY = input.mouse.screeny
 
     const angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX)
-    player.rv = ((angle * (180 / Math.PI)) - player.rotation) / 10
+
+    if(states.state == "game") {
+        player.rv = ((angle * (180 / Math.PI)) - player.rotation) / 10
+    }
+    
+    if(states.state == "dead") {
+        player.rv = ((Math.atan2(player.yv, player.xv) * (180 / Math.PI)) - player.rotation) / 50
+    }
 
     if(player.collide) {
         level.gridelements.forEach((row, x) => {
@@ -233,16 +257,16 @@ player.frame = () => {
                                 player.x += -player.xv
 
                                 player.xv *= -player.bouncyness
-                                player.xv += bounceplusx
+                                player.xv += states.state == "game" ? bounceplusx : 0
 
                                 if(colliding()) {
                                     player.y += -player.yv
                                     player.yv *= -player.bouncyness
-                                    player.yv += bounceplusy
+                                    player.yv += states.state == "game" ? bounceplusy : 0
                                 }
                             } else {
                                 player.yv *= -player.bouncyness
-                                player.yv += bounceplusy
+                                player.yv += states.state == "game" ? bounceplusy : 0
                             }
                         } else {
                             break
@@ -263,15 +287,15 @@ player.frame = () => {
     player.rotation += player.rv
 
     if(states.state == "game" || states.state == "dead") {
-        const deadzoneheight = 25
+        const deadzoneheight = 50
 
         const targetcamerax = Math.min(
-            Math.max(player.x - (0 / ((camera.zoom / 100)) / 2), blocks.blockwidth * 20.5),
-            ((level.width - 20.5) * blocks.blockwidth) - 2
+            Math.max((player.x + player.width / 2) - (0 / ((camera.zoom / 100)) / 2), blocks.blockwidth * 20.5),
+            (((level.width - 20.5) * blocks.blockwidth) - 2)
         )
 
         const targetcameray = Math.max(
-            player.y + (0 / ((camera.zoom / 100)) / 2),
+            (player.y - player.height / 2) + (0 / ((camera.zoom / 100)) / 2),
             -((level.height - 11) * blocks.blockheight)
         )
 
