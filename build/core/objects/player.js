@@ -44,8 +44,9 @@ player.reset = () => {
     player.lifespanlose = 2;
     player.maxlifespan = 100;
     player.defense = 1;
+    player.droprate = 1;
     player.collide = true;
-    player.showhitbox = true;
+    player.showhitbox = false;
     player.lifespan = player.maxlifespan;
     gui.died.style.display = "none";
     if (player.timesreset > 0) {
@@ -64,6 +65,27 @@ player.reset = () => {
 };
 player.init = () => {
     player.reset();
+    player.inventory = {};
+    player.inventory.items = {};
+    player.inventory.additem = (id, amount) => {
+        if (player.inventory.items[id]) {
+            player.inventory.items[id] += amount;
+        }
+        else {
+            player.inventory.items[id] = amount;
+        }
+    };
+    player.inventory.setitem = (id, amount) => {
+        player.inventory.items[id] = amount;
+    };
+    player.inventory.removeitem = (id, amount) => {
+        if (player.inventory.items[id]) {
+            player.inventory.items[id] -= amount;
+        }
+    };
+    hooks.registerhookcallback("level.blocks.broken", (x, y, id) => {
+        player.inventory.additem(id, player.droprate);
+    });
     const div = document.createElement("div");
     div.style.position = "absolute";
     div.style.left = `${player.x}px`;
@@ -207,7 +229,7 @@ player.frame = () => {
             });
         });
     }
-    if (player.y < -((level.height - 1.5) * blocks.blockheight) || player.y > 0) {
+    if (player.y < -((level.height - 1.5) * blocks.blockheight)) {
         player.yv = 0;
     }
     player.x = Math.min(Math.max(player.x, 0), (level.width - 1) * blocks.blockwidth);

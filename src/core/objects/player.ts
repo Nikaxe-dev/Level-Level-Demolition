@@ -1,4 +1,10 @@
-type playerinventoryinterface = blockdatainterface[]
+interface playerinventoryinterface {
+    items: {[key: number]: number}
+
+    additem(id: number, amount: number): undefined
+    setitem(id: number, amount: number): undefined
+    removeitem(id: number, amount: number): undefined
+}
 
 interface playerinterface {
     x: number
@@ -52,6 +58,7 @@ interface playerinterface {
     lifespanlose: number
 
     inventory: playerinventoryinterface
+    droprate: number
 
     timesreset: number
 
@@ -125,9 +132,11 @@ player.reset = () => {
     player.maxlifespan = 100
     player.defense = 1
 
+    player.droprate = 1
+
     player.collide = true
 
-    player.showhitbox = true
+    player.showhitbox = false
 
     player.lifespan = player.maxlifespan
 
@@ -155,6 +164,32 @@ player.reset = () => {
 
 player.init = () => {
     player.reset()
+
+    player.inventory = {} as playerinventoryinterface
+
+    player.inventory.items = {}
+
+    player.inventory.additem = (id, amount) => {
+        if(player.inventory.items[id]) {
+            player.inventory.items[id] += amount
+        } else {
+            player.inventory.items[id] = amount
+        }
+    }
+
+    player.inventory.setitem = (id, amount) => {
+        player.inventory.items[id] = amount
+    }
+
+    player.inventory.removeitem = (id, amount) => {
+        if(player.inventory.items[id]) {
+            player.inventory.items[id] -= amount
+        }
+    }
+
+    hooks.registerhookcallback("level.blocks.broken", (x: number, y: number, id: number) => {
+        player.inventory.additem(id, player.droprate)
+    })
 
     const div = document.createElement("div")
     div.style.position = "absolute"
@@ -340,7 +375,7 @@ player.frame = () => {
         })
     }
 
-    if(player.y < -((level.height - 1.5) * blocks.blockheight) || player.y > 0) {
+    if(player.y < -((level.height - 1.5) * blocks.blockheight)) {
         player.yv = 0
     }
 

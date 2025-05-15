@@ -1,5 +1,6 @@
 interface camerainterface {
     zoom: number
+    zoomvalue: number
 
     x: number
     y: number
@@ -13,6 +14,27 @@ interface camerainterface {
 }
 
 const camera = {} as camerainterface
+camera.zoomvalue = 75
+
+hooks.registerhook("camera.zoom.changed")
+
+Object.defineProperty(camera, "zoom", {
+    enumerable: true,
+    configurable: true,
+
+    get: () => {
+        return camera.zoomvalue
+    },
+
+    set: (v) => {
+        let old = camera.zoomvalue
+
+        camera.zoomvalue = v
+
+        hooks.callhook("camera.zoom.changed", v, old)
+    },
+})
+
 camera.zoom = 75
 camera.x = -500
 camera.y = 0

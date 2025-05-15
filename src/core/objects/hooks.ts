@@ -12,11 +12,19 @@ type defaulthooks =
     | "grid.update.blocks.set"
     | "grid.update.blocks.update"
 
+    | "level.blocks.broken"
+    | "level.blocks.damaged"
+
     | "state.changed"
 
     | "player.died"
     | "player.reset"
     | "player.initialized"
+
+    | "player.inventory.itemadded"
+    | "player.inventory.itemremoved"
+
+    | "camera.zoom.changed"
 
     | (string & {})
 

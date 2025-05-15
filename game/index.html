@@ -23,13 +23,15 @@
 
         <div id="gui">
             <div id="died" style="display: none;">
-                <h1 class="bebas-neue-regular bold-info-text" style="font-size: 45px; -webkit-text-stroke-width: 2.5px; top: -25px; left: calc(50% - (131.5px / 2)); position: absolute;">You Died!</h1>
+                <h1 class="bebas-neue-regular bold-info-text" style="font-size: 45px; -webkit-text-stroke-width: 2.5px; top: -25px; position: relative;">You Died!</h1>
 
-                <ul class="options-list">
-                    <li class="options-item"><button class="options-button" onclick="player.reset()" style="background-color: grey;">Restart</button></li>
-                    <li class="options-item"><button class="options-button" onclick="states.state = 'skilltree'" style="background-color: greenyellow;">Upgrade</button></li>
-                    <li class="options-item"><button class="options-button" style="background-color: red;">Exit</button></li>
-                </ul>
+                <div class="options-list-container">
+                    <ul class="options-list">
+                        <li class="options-item"><button class="options-button" onclick="player.reset()" style="background-color: grey;">Restart</button></li>
+                        <li class="options-item"><button class="options-button" onclick="states.state = 'skilltree'" style="background-color: greenyellow;">Upgrade</button></li>
+                        <li class="options-item"><button class="options-button" style="background-color: red;">Exit</button></li>
+                    </ul>
+                </div>
             </div>
         </div>
 

@@ -63,6 +63,9 @@ hooks.registerhook("grid.render.block.updated")
 hooks.registerhook("grid.update.blocks.set")
 hooks.registerhook("grid.update.blocks.update")
 
+hooks.registerhook("level.blocks.broken")
+hooks.registerhook("level.blocks.damaged")
+
 // Grid Functions
 
 level.outputgrid = (grid) => {
@@ -149,7 +152,11 @@ level.damageblock = (x, y, damage) => {
 
         if(block.health <= 0) {
             level.setblock(x, y, 0)
+
+            hooks.callhook("level.blocks.broken", x, y, block.id, damage)
         }
+
+        hooks.callhook("level.blocks.damaged", x, y, block.id, damage)
     }
 }
 
