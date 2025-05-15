@@ -69,6 +69,10 @@ gui.lifespanbar.init = () => {
 gui.lifespanbar.frame = () => {
     gui.lifespanbar.fillpercent += ((player.lifespan / player.maxlifespan) - gui.lifespanbar.fillpercent) / 25
 
+    if(isNaN(gui.lifespanbar.fillpercent)) {
+        gui.lifespanbar.fillpercent = (player.lifespan / player.maxlifespan)
+    }
+
     gui.lifespanbar.backgrounddiv.style.left = gui.lifespanbar.x + "px"
     gui.lifespanbar.backgrounddiv.style.top = gui.lifespanbar.y + "px"
 

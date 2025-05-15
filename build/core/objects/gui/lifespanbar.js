@@ -40,6 +40,9 @@ gui.lifespanbar.init = () => {
 };
 gui.lifespanbar.frame = () => {
     gui.lifespanbar.fillpercent += ((player.lifespan / player.maxlifespan) - gui.lifespanbar.fillpercent) / 25;
+    if (isNaN(gui.lifespanbar.fillpercent)) {
+        gui.lifespanbar.fillpercent = (player.lifespan / player.maxlifespan);
+    }
     gui.lifespanbar.backgrounddiv.style.left = gui.lifespanbar.x + "px";
     gui.lifespanbar.backgrounddiv.style.top = gui.lifespanbar.y + "px";
     gui.lifespanbar.filldiv.style.width = ((gui.lifespanbar.width - gui.lifespanbar.width * 0.1) * (camera.zoom / 100)) * gui.lifespanbar.fillpercent + "px";
