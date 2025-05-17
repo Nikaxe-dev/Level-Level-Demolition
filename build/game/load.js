@@ -13,7 +13,8 @@ const loadscripts = {
         "../build/core/common/random.js",
     ],
     "Pre-Core Configuration Scripts": [
-        "../build/config/layers.js"
+        "../build/config/layers.js",
+        "../build/config/settings.js",
     ],
     "Core Scripts": [
         "../build/core/objects/game.js",
@@ -23,6 +24,7 @@ const loadscripts = {
         "../build/core/objects/blocks.js",
         "../build/core/objects/level.js",
         "../build/core/objects/camera.js",
+        "../build/core/objects/gui/skilltree.js",
         "../build/core/objects/player.js",
     ],
     "Post-Core Configuration Scripts": [

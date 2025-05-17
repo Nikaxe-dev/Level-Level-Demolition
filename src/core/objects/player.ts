@@ -62,6 +62,9 @@ interface playerinterface {
 
     timesreset: number
 
+    deltatime: number
+    pretime: Date
+
     init(): undefined
     frame(): undefined
     reset(): undefined
@@ -71,6 +74,9 @@ interface playerinterface {
 const player = {} as playerinterface
 
 player.timesreset = 0
+
+player.deltatime = 0.01
+player.pretime = new Date()
 
 // Hooks
 
@@ -111,18 +117,18 @@ player.reset = () => {
 
     player.width = 32
     player.height = 64
-    player.friction = 0.9
-    player.frictiondown = 0.98
-    player.gravity = 0.15
+    player.friction = 1
+    player.frictiondown = 25
+    player.gravity = 15
 
     player.bouncyness = 0.95
 
-    player.bounceplusx = 5
-    player.bounceplusy = 4
+    player.bounceplusx = 500
+    player.bounceplusy = 400
 
-    player.speedx = .35
-    player.speedy = .45
-    player.velocitymax = 10
+    player.speedx = 35
+    player.speedy = 45
+    player.velocitymax = 1000
 
     player.drillstrength = 1
     player.drilldestroywidth = 1
@@ -243,29 +249,35 @@ player.init = () => {
 }
 
 player.frame = () => {
+    player.deltatime = (new Date().getTime() - player.pretime.getTime()) / 1000
+
+    player.pretime = new Date()
+
+    const deltatime = player.deltatime
+
     const div = player.div
     const image = player.div.getElementsByClassName("game-image")[0]
 
-    player.yv -= player.gravity
+    player.yv -= player.gravity * (deltatime > 0.015 ? deltatime * 2 : deltatime)
 
     if(states.state == "game") {
         const joystickx = (input.keydown("d") ? 1 : 0) - (input.keydown("a") ? 1 : 0)
         const joysticky = (input.keydown("w") ? 1 : 0)
 
-        player.xv += joystickx * player.speedx
-        player.yv += joysticky * player.speedy
+        player.xv += joystickx * player.speedx * deltatime
+        player.yv += joysticky * player.speedy * deltatime
     }
 
-        player.xv *= player.friction
+    player.xv *= Math.pow((player.friction / 1000), deltatime)
 
     if(player.yv > 0) {
-        player.yv *= player.friction
+        player.yv *= Math.pow((player.friction / 1000), deltatime)
     } else {
-        player.yv *= player.frictiondown
+        player.yv *= Math.pow((player.frictiondown / 1000), deltatime)
     }
 
-    player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax)
-    player.yv = Math.max(Math.min(player.yv, player.velocitymax), -player.velocitymax * 1.5)
+    player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax);
+    player.yv = Math.max(Math.min(player.yv, player.velocitymax * 1.5), -player.velocitymax * 1.5);
 
     player.x += player.xv
     player.y += player.yv
@@ -331,8 +343,8 @@ player.frame = () => {
 
                             player.y += -player.yv
 
-                            let bounceplusx = (player.xv < 0 ? 1 : -1) * player.bounceplusx
-                            let bounceplusy = (player.yv < 0 ? 1 : -1) * player.bounceplusy
+                            let bounceplusx = (player.xv < 0 ? 1 : -1) * player.bounceplusx * deltatime
+                            let bounceplusy = (player.yv < 0 ? 1 : -1) * player.bounceplusy * deltatime
 
                             if(colliding()) {
                                 player.y += player.yv
@@ -342,9 +354,9 @@ player.frame = () => {
                                 player.xv *= -player.bouncyness
 
                                 if(breakcolliding()) {
-                                    player.xv += states.state == "game" ? bounceplusx : 0
+                                    player.xv += (states.state == "game" ? bounceplusx : 0)
                                 } else {
-                                    player.xv += states.state == "game" ? bounceplusx / 3 : 0
+                                    player.xv += (states.state == "game" ? bounceplusx / 3 : 0)
                                 }
 
                                 if(colliding()) {
@@ -352,18 +364,18 @@ player.frame = () => {
                                     player.yv *= -player.bouncyness
 
                                     if(breakcolliding()) {
-                                        player.yv += states.state == "game" ? bounceplusy : 0
+                                        player.yv += (states.state == "game" ? bounceplusy : 0)
                                     } else {
-                                        player.yv += states.state == "game" ? bounceplusy / 3 : 0
+                                        player.yv += (states.state == "game" ? bounceplusy / 3 : 0)
                                     }
                                 }
                             } else {
                                 player.yv *= -player.bouncyness
 
                                 if(breakcolliding()) {
-                                    player.yv += states.state == "game" ? bounceplusy : 0
+                                    player.yv += (states.state == "game" ? bounceplusy : 0)
                                 } else {
-                                    player.yv += states.state == "game" ? bounceplusy / 3 : 0
+                                    player.yv += (states.state == "game" ? bounceplusy / 3 : 0)
                                 }
                             }
                         } else {
@@ -426,6 +438,8 @@ player.frame = () => {
 
     player.breakhitboxvisual.style.zIndex = String(layers["player.breakhitbox"])
     player.hitboxvisual.style.zIndex = String(layers["player.hitbox"])
+
+    console.log(player.deltatime)
 
     requestAnimationFrame(player.frame)
 }
