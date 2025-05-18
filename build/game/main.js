@@ -6,4 +6,5 @@ hooks.registerhookcallback("game.scripts.loaded", () => {
     loadscript("../build/game/levelhandler.js");
     loadscript("../build/game/playerhandler.js");
     loadscript("../build/game/guihandler.js");
+    loadscript("../build/game/skillhandler.js");
 });

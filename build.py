@@ -21,7 +21,7 @@ def start_http_server():
 
 start_http_server()
 
-build_interval = 1
+build_interval = 0.35
 build_wait = 0
 comment = "// Scripts created by Nikaxe and compiled from typescript to javascript.\n\n"
 

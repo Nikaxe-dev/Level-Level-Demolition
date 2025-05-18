@@ -17,6 +17,7 @@ const loadscripts: loadscriptsinterface = {
     "Pre-Core Configuration Scripts": [
         "../build/config/layers.js",
         "../build/config/settings.js",
+        "../build/config/locations.js",
     ],
 
     "Core Scripts": [
@@ -36,6 +37,7 @@ const loadscripts: loadscriptsinterface = {
         "../build/config/blocktypes.js",
         "../build/config/levelconfig.js",
         "../build/config/moredebug.js",
+        "../build/config/skills.js",
     ],
 
     "Gui Scripts": [

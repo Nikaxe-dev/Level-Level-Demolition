@@ -57,9 +57,11 @@ player.reset = () => {
     }
     // Lose drill lifespan
     player.lifespanloseinterval = setInterval(() => {
-        player.lifespan -= player.lifespanlose / 10;
-        if (player.lifespan < 0) {
-            player.die();
+        if (states.state == "game") {
+            player.lifespan -= player.lifespanlose / 10;
+            if (player.lifespan < 0) {
+                player.die();
+            }
         }
     }, 100);
     player.timesreset += 1;
@@ -243,7 +245,7 @@ player.frame = () => {
     }
     player.x = Math.min(Math.max(player.x, 0), (level.width - 1) * blocks.blockwidth);
     player.y = Math.max(player.y, -((level.height - 1.5) * blocks.blockheight));
-    //player.rotation += player.rv
+    player.rotation += player.rv;
     if (states.state == "game" || states.state == "dead") {
         const deadzoneheight = 50;
         const targetcamerax = Math.min(Math.max((player.x + player.width / 2) - (0 / ((camera.zoom / 100)) / 2), blocks.blockwidth * 20.5), (((level.width - 20.5) * blocks.blockwidth) - 2));
