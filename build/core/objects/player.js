@@ -130,7 +130,7 @@ player.frame = () => {
     const deltatime = player.deltatime;
     const div = player.div;
     const image = player.div.getElementsByClassName("game-image")[0];
-    player.yv -= player.gravity * (deltatime > 0.015 ? deltatime * 2 : deltatime);
+    player.yv -= player.gravity * (deltatime > 0.015 ? deltatime * 2 : deltatime < 0.007 ? deltatime / 2 : deltatime);
     if (states.state == "game") {
         const joystickx = (input.keydown("d") ? 1 : 0) - (input.keydown("a") ? 1 : 0);
         const joysticky = (input.keydown("w") ? 1 : 0);
