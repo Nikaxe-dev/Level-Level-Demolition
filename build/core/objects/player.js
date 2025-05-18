@@ -148,8 +148,8 @@ player.frame = () => {
     player.yv = Math.max(Math.min(player.yv, player.velocitymax * 1.5), -player.velocitymax * 1.5);
     player.x += player.xv;
     player.y += player.yv;
-    player.breakhitboxx = player.x + getdirectionvector(player.rotation).x * 20;
-    player.breakhitboxy = player.y - getdirectionvector(player.rotation).y * 20;
+    player.breakhitboxx = player.x + getdirectionvector(player.rotation * (180 / Math.PI)).x * 20;
+    player.breakhitboxy = player.y - getdirectionvector(player.rotation * (180 / Math.PI)).y * 20;
     const rect = player.div.getBoundingClientRect();
     const playerCenterX = rect.left + rect.width / 2;
     const playerCenterY = rect.top + rect.height / 2;
@@ -157,10 +157,14 @@ player.frame = () => {
     const mouseY = input.mouse.screeny;
     const angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX);
     if (states.state == "game") {
-        player.rv = ((angle * (180 / Math.PI)) - player.rotation) / 10;
+        // const results = fancyspring(player.rotation, player.rv, angle * (180 / Math.PI), deltatime, 100, 0, 360)
+        // player.rotation = results[0]
+        // player.rv = results[1]
+        player.rotation = rlerp(player.rotation, angle, 0.15);
+        console.log(player.rotation);
     }
     if (states.state == "dead") {
-        player.rv = ((Math.atan2(player.yv, player.xv) * (180 / Math.PI)) - player.rotation) / 50;
+        player.rotation = rlerp(player.rotation, Math.atan2(player.yv, player.xv), 0.15);
     }
     if (player.collide) {
         level.gridelements.forEach((row, x) => {
@@ -239,7 +243,7 @@ player.frame = () => {
     }
     player.x = Math.min(Math.max(player.x, 0), (level.width - 1) * blocks.blockwidth);
     player.y = Math.max(player.y, -((level.height - 1.5) * blocks.blockheight));
-    player.rotation += player.rv;
+    //player.rotation += player.rv
     if (states.state == "game" || states.state == "dead") {
         const deadzoneheight = 50;
         const targetcamerax = Math.min(Math.max((player.x + player.width / 2) - (0 / ((camera.zoom / 100)) / 2), blocks.blockwidth * 20.5), (((level.width - 20.5) * blocks.blockwidth) - 2));
@@ -254,7 +258,7 @@ player.frame = () => {
     }
     div.style.left = `${player.x}px`;
     div.style.top = `${-player.y}px`;
-    div.style.transform = `rotate(${player.rotation - 90}deg)`;
+    div.style.transform = `rotate(${player.rotation * (180 / Math.PI) - 90}deg)`;
     div.style.zIndex = String(layers["player.drill"]);
     player.hitboxvisual.style.left = `${player.x + player.hitboxwidth / 2}px`;
     player.hitboxvisual.style.top = `${-player.y + player.hitboxheight / 2}px`;
@@ -266,6 +270,5 @@ player.frame = () => {
     player.breakhitboxvisual.style.height = `${player.breakhitboxheight}px`;
     player.breakhitboxvisual.style.zIndex = String(layers["player.breakhitbox"]);
     player.hitboxvisual.style.zIndex = String(layers["player.hitbox"]);
-    console.log(player.deltatime);
     requestAnimationFrame(player.frame);
 };
