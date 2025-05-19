@@ -21,6 +21,13 @@ type debuglog =
     | "inputsetup"
     | "inputdebug"
 
+    // Player
+
+    | "playerposition"
+    | "playervelocity"
+
+    | "playerdeltatime"
+
     // States
 
     | "state"
@@ -130,6 +137,18 @@ debug.loglist = [
 
     "state",
 ]
+
+let urlsearchparams = new URLSearchParams(window.location.search)
+
+if(urlsearchparams.get("debug") !== null) {
+    let list = urlsearchparams.get("debug")?.split(",")
+
+    if(list?.includes("default")) {
+        list = list.concat(debug.loglist)
+    }
+
+    debug.loglist = list as debuglog[]
+}
 
 // || CUSTOM LOGTYPES ||
 //  For custom logtypes you dont need to change anything in this file.

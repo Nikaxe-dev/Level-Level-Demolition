@@ -267,8 +267,8 @@ player.frame = () => {
         const joystickx = (input.keydown("d") ? 1 : 0) - (input.keydown("a") ? 1 : 0)
         const joysticky = (input.keydown("w") ? 1 : 0)
 
-        player.xv += joystickx * player.speedx * deltatime
-        player.yv += joysticky * player.speedy * deltatime
+        player.xv += (joystickx * player.speedx) * deltatime
+        player.yv += (joysticky * player.speedy) * deltatime
     }
 
     player.xv *= Math.pow((player.friction / 1000), deltatime)
@@ -281,6 +281,8 @@ player.frame = () => {
 
     player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax);
     player.yv = Math.max(Math.min(player.yv, player.velocitymax * 1.5), -player.velocitymax * 1.5);
+
+    //console.log(player.xv, player.yv)
 
     player.x += player.xv
     player.y += player.yv
@@ -298,14 +300,7 @@ player.frame = () => {
     const angle = Math.atan2(mouseY - playerCenterY, mouseX - playerCenterX)
 
     if(states.state == "game") {
-        // const results = fancyspring(player.rotation, player.rv, angle * (180 / Math.PI), deltatime, 100, 0, 360)
-
-        // player.rotation = results[0]
-        // player.rv = results[1]
-
         player.rotation = rlerp(player.rotation, angle, 0.15)
-
-        console.log(player.rotation)
     }
     
     if(states.state == "dead") {
@@ -448,6 +443,10 @@ player.frame = () => {
 
     player.breakhitboxvisual.style.zIndex = String(layers["player.breakhitbox"])
     player.hitboxvisual.style.zIndex = String(layers["player.hitbox"])
+
+    debug.log(`Player Position: (x: ${player.x}, y: ${player.y}), (rotation: ${player.rotation})`, "playerposition")
+    debug.log(`Player Velocity: (xv: ${player.xv}, yv: ${player.yv}), (rv: ${player.rv})`, "playervelocity")
+    debug.log(`Player Deltatime: (${player.deltatime})`, "playerdeltatime")
 
     requestAnimationFrame(player.frame)
 }

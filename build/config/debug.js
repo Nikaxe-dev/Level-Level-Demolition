@@ -63,6 +63,14 @@ debug.loglist = [
     "longwarning",
     "state",
 ];
+let urlsearchparams = new URLSearchParams(window.location.search);
+if (urlsearchparams.get("debug") !== null) {
+    let list = urlsearchparams.get("debug")?.split(",");
+    if (list?.includes("default")) {
+        list = list.concat(debug.loglist);
+    }
+    debug.loglist = list;
+}
 // || CUSTOM LOGTYPES ||
 //  For custom logtypes you dont need to change anything in this file.
 //  All you need to do is just use the name in the functions.
