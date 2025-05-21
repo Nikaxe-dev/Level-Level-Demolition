@@ -119,18 +119,18 @@ player.reset = () => {
 
     player.width = 32
     player.height = 64
-    player.friction = 0.999
+    player.friction = 2
     player.frictiondown = 0.85
     player.frictionup = 0.99
     player.gravity = 15
 
-    player.bouncyness = 0.25
+    player.bouncyness = 0.35
 
-    player.bounceplusx = 250
+    player.bounceplusx = 350
     player.bounceplusy = 350
 
-    player.speedx = 5
-    player.speedy = 25
+    player.speedx = 10
+    player.speedy = 35
     player.velocitymax = 10000
 
     player.drillstrength = 1
@@ -272,12 +272,12 @@ player.frame = () => {
 
         player.xv += (joystickx * player.speedx) * deltatime
         
-        if (player.yv < player.speedy / (6 / ((Math.max(player.speedy, 1)) / 25))) {
+        if (player.yv < player.speedy / (9 / ((Math.max(player.speedy, 1)) / 25))) {
             player.yv += (joysticky * player.speedy) * deltatime
         }
     }
 
-    player.xv = lerp(player.xv, 0, 1 - Math.pow(0.5, deltatime * 0.95))
+    player.xv = lerp(player.xv, 0, 1 - Math.pow(0.5, deltatime * player.friction))
     player.yv = lerp(player.yv, 0, 1 - Math.pow(0.5, deltatime * 0.85))
 
     player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax)
