@@ -51,3 +51,7 @@ function rlerp(a: number, b: number, w: number) {
     let sn = (1 - w) * Math.sin(a) + w * Math.sin(b)
     return Math.atan2(sn, cs)
 }
+
+function lerp(a: number, b: number, t: number) {
+    return a*(1 - t)+b*t
+}

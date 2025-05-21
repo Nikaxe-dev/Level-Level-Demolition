@@ -31,15 +31,16 @@ player.reset = () => {
     player.collisionsteps = 1;
     player.width = 32;
     player.height = 64;
-    player.friction = 1;
-    player.frictiondown = 25;
+    player.friction = 0.999;
+    player.frictiondown = 0.85;
+    player.frictionup = 0.99;
     player.gravity = 15;
-    player.bouncyness = 0.95;
-    player.bounceplusx = 500;
-    player.bounceplusy = 400;
-    player.speedx = 35;
-    player.speedy = 45;
-    player.velocitymax = 1000;
+    player.bouncyness = 0.25;
+    player.bounceplusx = 250;
+    player.bounceplusy = 350;
+    player.speedx = 5;
+    player.speedy = 25;
+    player.velocitymax = 10000;
     player.drillstrength = 1;
     player.drilldestroywidth = 1;
     player.drilldestroyheight = 1;
@@ -132,22 +133,20 @@ player.frame = () => {
     const deltatime = player.deltatime;
     const div = player.div;
     const image = player.div.getElementsByClassName("game-image")[0];
-    player.yv -= player.gravity * (deltatime > 0.015 ? deltatime * 2 : deltatime < 0.007 ? deltatime / 2 : deltatime);
+    //player.yv -= player.gravity * (deltatime > 0.015 ? deltatime * 2 : deltatime < 0.007 ? deltatime / 2 : deltatime)
+    player.yv -= player.gravity * deltatime;
     if (states.state == "game") {
         const joystickx = (input.keydown("d") ? 1 : 0) - (input.keydown("a") ? 1 : 0);
         const joysticky = (input.keydown("w") ? 1 : 0);
         player.xv += (joystickx * player.speedx) * deltatime;
-        player.yv += (joysticky * player.speedy) * deltatime;
+        if (player.yv < player.speedy / (6 / ((Math.max(player.speedy, 1)) / 25))) {
+            player.yv += (joysticky * player.speedy) * deltatime;
+        }
     }
-    player.xv *= Math.pow((player.friction / 1000), deltatime);
-    if (player.yv > 0) {
-        player.yv *= Math.pow((player.friction / 1000), deltatime);
-    }
-    else {
-        player.yv *= Math.pow((player.frictiondown / 1000), deltatime);
-    }
+    player.xv = lerp(player.xv, 0, 1 - Math.pow(0.5, deltatime * 0.95));
+    player.yv = lerp(player.yv, 0, 1 - Math.pow(0.5, deltatime * 0.85));
     player.xv = Math.max(Math.min(player.xv, player.velocitymax), -player.velocitymax);
-    player.yv = Math.max(Math.min(player.yv, player.velocitymax * 1.5), -player.velocitymax * 1.5);
+    player.yv = Math.max(Math.min(player.yv, player.velocitymax), -player.velocitymax);
     //console.log(player.xv, player.yv)
     player.x += player.xv;
     player.y += player.yv;
@@ -248,12 +247,12 @@ player.frame = () => {
         const targetcamerax = Math.min(Math.max((player.x + player.width / 2) - (0 / ((camera.zoom / 100)) / 2), blocks.blockwidth * 20.5), (((level.width - 20.5) * blocks.blockwidth) - 2));
         const targetcameray = Math.max((player.y - player.height / 2) + (0 / ((camera.zoom / 100)) / 2), -((level.height - 11) * blocks.blockheight));
         camera.x += (targetcamerax - camera.x) / 5;
-        if (Math.abs(camera.y - targetcameray) > deadzoneheight) {
-            camera.y += (targetcameray - camera.y) / 10;
-        }
-        else {
-            camera.y += (targetcameray - camera.y) / 17.5;
-        }
+        camera.y += (targetcameray - camera.y) / 10;
+        // if (Math.abs(camera.y - targetcameray) > deadzoneheight) {
+        //     camera.y += (targetcameray - camera.y) / 10
+        // } else {
+        //     camera.y += (targetcameray - camera.y) / 17.5
+        // }
     }
     div.style.left = `${player.x}px`;
     div.style.top = `${-player.y}px`;
@@ -272,5 +271,5 @@ player.frame = () => {
     debug.log(`Player Position: (x: ${player.x}, y: ${player.y}), (rotation: ${player.rotation})`, "playerposition");
     debug.log(`Player Velocity: (xv: ${player.xv}, yv: ${player.yv}), (rv: ${player.rv})`, "playervelocity");
     debug.log(`Player Deltatime: (${player.deltatime})`, "playerdeltatime");
-    requestAnimationFrame(player.frame);
+    setTimeout(player.frame, 0);
 };
